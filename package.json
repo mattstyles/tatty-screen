@@ -1,0 +1,24 @@
+{
+  "name": "tatty",
+  "version": "0.0.0",
+  "description": "ES6 green-screen teleprinter",
+  "main": "tatty.js",
+  "scripts": {
+    "watch": "./watch.js",
+    "build": "./build.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Styles @personalurban",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattstyles/tatty"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "jquery": "^2.1.1",
+    "lodash-es6": "git://github.com/lodash/lodash-es6",
+    "traceur": "0.0.66",
+    "watch": "^0.11.0",
+    "wolfy87-eventemitter": "^4.2.6"
+  }
+}

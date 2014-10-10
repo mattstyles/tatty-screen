@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tatty</title>
+</head>
+<body>
+
+    <script src="./node_modules/traceur/bin/traceur-runtime.js"></script>
+    <script src="./node_modules/wolfy87-eventemitter/EventEmitter.min.js"></script>
+    <script src="./bundle.js"></script>
+
+    <script>
+        var Tatty = System.get( 'lib/tatty' ).default;
+        var tty = new Tatty( document.body );
+        tty.write( 'Welcome to tatty' );
+    </script>
+</body>
+</html>
