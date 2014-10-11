@@ -1,5 +1,5 @@
 
-export default class Tatty extends EventEmitter {
+export default class Tatty {
 
     constructor( el, opts ) {
         this.el = el;
@@ -7,6 +7,8 @@ export default class Tatty extends EventEmitter {
             cols: 80,
             rows: 24
         }, opts || {} );
+
+        console.log( 'Tatty instantiated' );
     }
 
     write( chars ) {
@@ -16,5 +18,4 @@ export default class Tatty extends EventEmitter {
     get bufferSize() {
         return this.opts.cols * this.opts.rows;
     }
-
 };

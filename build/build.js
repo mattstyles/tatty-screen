@@ -8,12 +8,12 @@ var src = path.join( __dirname, '../src' );
 var dist = path.join( __dirname, '../dist' );
 var modules = path.join( __dirname, '../node_modules' );
 
-builder.build( 'tatty', {
+builder.build( 'index', {
     baseURL: src,
     map: {
         EventEmittter: path.join( src, 'vendor/eventemitter' )
     }
-}, path.join( dist, '/main.js' ) )
+}, path.join( dist, '/index.js' ) )
     .then( function() {
         console.log( 'Build complete' );
     })

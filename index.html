@@ -9,7 +9,7 @@
     <script src="./dist/common/traceur-runtime.js"></script>
     <script src="./dist/common/es6-module-loader.js"></script>
     <script src="./dist/common/system.js"></script>
-    <script src="./dist/main.js"></script>
+    <script src="./dist/index.js"></script>
 
     <script>
         /*
@@ -17,6 +17,11 @@
         var tty = new Tatty( document.body );
         tty.write( 'Welcome to tatty' );
         */
+
+        System.import( 'index' )
+            .then( function() {
+                console.log( 'Module loaded' );
+            });
     </script>
 </body>
 </html>
