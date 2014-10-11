@@ -1,0 +1,16 @@
+{
+  "name": "tatty",
+  "version": "0.0.0",
+  "authors": [
+    "mattstyles <matt@veryfizzyjelly.com>"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

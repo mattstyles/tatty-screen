@@ -6,14 +6,17 @@
 </head>
 <body>
 
-    <script src="./node_modules/traceur/bin/traceur-runtime.js"></script>
-    <script src="./node_modules/wolfy87-eventemitter/EventEmitter.min.js"></script>
-    <script src="./bundle.js"></script>
+    <script src="./dist/common/traceur-runtime.js"></script>
+    <script src="./dist/common/es6-module-loader.js"></script>
+    <script src="./dist/common/system.js"></script>
+    <script src="./dist/main.js"></script>
 
     <script>
+        /*
         var Tatty = System.get( 'lib/tatty' ).default;
         var tty = new Tatty( document.body );
         tty.write( 'Welcome to tatty' );
+        */
     </script>
 </body>
 </html>

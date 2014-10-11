@@ -15,10 +15,10 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "jquery": "^2.1.1",
-    "lodash-es6": "git://github.com/lodash/lodash-es6",
+    "es6-module-loader": "^0.9.2",
+    "systemjs": "^0.9.1",
+    "systemjs-builder": "^0.2.1",
     "traceur": "0.0.66",
-    "watch": "^0.11.0",
-    "wolfy87-eventemitter": "^4.2.6"
+    "watch": "^0.11.0"
   }
 }

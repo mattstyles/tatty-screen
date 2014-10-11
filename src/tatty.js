@@ -1,6 +1,3 @@
-// import _ from '../node_modules/lodash-es6/lodash';
-//import def from '../node_modules/wolfy87-eventemitter/EventEmitter';
-import $ from 'jquery';
 
 export default class Tatty extends EventEmitter {
 

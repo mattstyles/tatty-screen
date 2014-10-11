@@ -3,7 +3,7 @@
 var spawn = require( 'child_process' ).spawn;
 var watch = require( 'watch' );
 
-watch.createMonitor( './lib', {
+watch.createMonitor( '../src', {
     ignoreDotFiles: true,
     ignoreDirectoryPattern: '/node_modules/',
     interval: 500
