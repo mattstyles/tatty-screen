@@ -11,8 +11,7 @@ var modules = path.join( __dirname, '../node_modules' );
 builder.build( 'index', {
     baseURL: src,
     paths: {
-        eventEmitter: path.resolve( src, 'vendor/eventEmitter/EventEmitter.js' ),
-        jquery: path.resolve( src, 'vendor/jquery/dist/jquery.js' )
+        eventEmitter: path.resolve( src, 'vendor/eventEmitter/EventEmitter.js' )
     }
     // map: {
     //     eventEmitter: path.join( src, 'vendor/eventEmitter/EventEmitter' ),

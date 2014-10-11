@@ -1,9 +1,23 @@
-import Tatty from './tatty';
+import EventEmitter from 'eventEmitter';
 
-var tty = new Tatty();
-tty.on( 'write', function( data ) {
-    console.log( '::', data );
-});
+export default class Tatty extends EventEmitter {
 
+    constructor( el, opts ) {
+        this.el = el;
+        this.opts = Object.assign({
+            cols: 80,
+            rows: 24
+        }, opts || {} );
 
-tty.write( 'Hello from tatty' );
+        console.log( 'Tatty instantiated' );
+    }
+
+    write( chars ) {
+        console.log( chars );
+        this.trigger( 'write', [ chars ]);
+    }
+
+    get bufferSize() {
+        return this.opts.cols * this.opts.rows;
+    }
+};
