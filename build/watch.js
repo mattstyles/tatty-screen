@@ -23,7 +23,7 @@ watch.createMonitor( src, {
             })
             .on( 'close', function( code ) {
                 if ( !error ) {
-                    console.log( 'Bundle updated' );
+                    console.log( new Date(), 'Bundle updated' );
                 }
             });
     });

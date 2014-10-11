@@ -12,15 +12,9 @@
     <script src="./dist/index.js"></script>
 
     <script>
-        /*
-        var Tatty = System.get( 'lib/tatty' ).default;
-        var tty = new Tatty( document.body );
-        tty.write( 'Welcome to tatty' );
-        */
-
         System.import( 'index' )
             .then( function() {
-                console.log( 'Module loaded' );
+                console.log( 'Bootstrapped' );
             });
     </script>
 </body>

@@ -12,5 +12,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "eventEmitter": "~4.2.9",
+    "jquery": "~2.1.1"
+  }
 }

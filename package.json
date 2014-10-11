@@ -4,8 +4,8 @@
   "description": "ES6 green-screen teleprinter",
   "main": "tatty.js",
   "scripts": {
-    "watch": "./watch.js",
-    "build": "./build.sh",
+    "watch": "./build/watch.js",
+    "build": "./build/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Styles @personalurban",

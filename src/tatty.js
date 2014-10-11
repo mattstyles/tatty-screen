@@ -1,5 +1,7 @@
+import EventEmitter from 'eventEmitter';
+import $ from './jquery';
 
-export default class Tatty {
+export default class Tatty extends EventEmitter {
 
     constructor( el, opts ) {
         this.el = el;
@@ -13,7 +15,9 @@ export default class Tatty {
 
     write( chars ) {
         console.log( chars );
+        this.trigger( 'write', [ chars ]);
     }
+
 
     get bufferSize() {
         return this.opts.cols * this.opts.rows;
