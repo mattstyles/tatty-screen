@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Tatty</title>
+    <style>
+        #main {
+
+        }
+    </style>
 </head>
 <body>
+    <div id="tty"></div>
 
     <script src="./dist/common/traceur-runtime.js"></script>
     <script src="./dist/common/es6-module-loader.js"></script>
@@ -17,10 +23,13 @@
                 console.log( 'Bootstrapped' );
                 var Tatty = module.default;
 
-                window.tty = new Tatty( document.body );
+                window.tty = new Tatty( document.querySelector( '#tty' ) );
 
                 tty.write( 'I ❤︎ Harmony' );
                 tty.write( tty.bufferSize );
+
+                tty.writeln( 'this is a line' );
+                tty.writeln( 'here is another line' );
             });
     </script>
 </body>

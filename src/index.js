@@ -6,7 +6,8 @@ export default class Tatty extends EventEmitter {
      * Attaches itself to the element supplied and gets ready to print
      */
     constructor( el, opts ) {
-        this.el = el;
+        this.parent = el;
+        this.el = this.createElement();
         this.opts = Object.assign({
             cols: 80,
             rows: 24
@@ -16,9 +17,15 @@ export default class Tatty extends EventEmitter {
 
         this.lines = [];
 
-        this.el.classList.add( 'tatty' );
+        // Set DOM styles
+        this.parent.classList.add( 'tatty' );
         this.lineHeight = 19;
-        this.height = this.opts.rows * this.lineHeight;
+        this.height = 'default';
+        this.width = 'default';
+
+        for ( let y = 0; y < this.opts.rows; y ++ ) {
+            this.createLine();
+        }
     }
 
     /**
@@ -59,11 +66,11 @@ export default class Tatty extends EventEmitter {
         if ( !this.el ) return;
 
         if ( h === 'default' ) {
-            this.el.style.height = this.opts.rows * this.lineHeight + 'px';
+            this.parent.style.height = this.opts.rows * this.lineHeight + 'px';
             return;
         }
 
-        this.el.style.height = h + 'px';
+        this.parent.style.height = h + 'px';
     }
 
     /**
@@ -72,7 +79,31 @@ export default class Tatty extends EventEmitter {
     get height() {
         if ( !this.el ) return;
 
-        return ~~this.el.style.height.replace( 'px', '' );
+        return ~~this.parent.style.height.replace( 'px', '' );
+    }
+
+    /**
+     * Sets the width of the element.
+     * Use 'default' to set the width based on character width and number of columns
+     */
+    set width( w ) {
+        if ( !this.el ) return;
+
+        if ( w === 'default' ) {
+            this.parent.style.width = this.opts.cols * this.charWidth + 'px';
+            return;
+        }
+
+        this.parent.style.width = w + 'px';
+    }
+
+    /**
+     * Grabs the element width and returns as an integer
+     */
+    get width() {
+        if ( !this.el ) return;
+
+        return ~~this.parent.style.width.replace( 'px', '' );
     }
 
     /**
@@ -108,11 +139,20 @@ export default class Tatty extends EventEmitter {
         var div = document.createElement( 'div' );
         div.classList.add( 'line' );
         div.style.top = this.lineHeight * this.lines.length + 'px';
+        div.style.width = this.width + 'px';
         this.el.appendChild( div );
         this.lines.push( div );
+        this.el.style.width = this.width + 'px';
+        this.el.style.height = this.lines.length * this.lineHeight + 'px';
+        this.showLastLine();
         return div;
     }
 
+
+    showLastLine() {
+        console.log( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) );
+        this.el.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
+    }
 
     /**
      * Inserts the main style for the tatty element
@@ -122,13 +162,17 @@ export default class Tatty extends EventEmitter {
         style.id = 'tatty';
         style.innerHTML = `
             .tatty {
+                position: relative;
                 background:white;
                 color: #333a3c;
                 font-family: 'Source Code Pro';
                 font-size: 15px;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
-                padding: 8px;
+                overflow: hidden;
+            }
+            .tatty .inner {
+                position: absolute;
             }
             .tatty .line {
                 position: absolute;
@@ -137,5 +181,13 @@ export default class Tatty extends EventEmitter {
 
         var head = document.querySelector( 'head' );
         head.appendChild( style );
+    }
+
+
+    createElement() {
+        var el = document.createElement( 'div' );
+        el.classList.add( 'inner' );
+        this.parent.appendChild( el );
+        return el;
     }
 };
