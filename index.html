@@ -17,10 +17,7 @@
                 console.log( 'Bootstrapped' );
                 var Tatty = module.default;
 
-                var tty = new Tatty( document.body, {
-                    cols: 48,
-                    rows: 12
-                });
+                window.tty = new Tatty( document.body );
 
                 tty.write( 'I ❤︎ Harmony' );
                 tty.write( tty.bufferSize );
