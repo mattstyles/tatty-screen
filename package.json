@@ -1,8 +1,8 @@
 {
-  "name": "tatty",
+  "name": "tattyScreen",
   "version": "0.0.0",
   "description": "ES6 green-screen teleprinter",
-  "main": "tatty.js",
+  "main": "src/index.js",
   "scripts": {
     "watch": "./build/watch.js",
     "build": "./build/build.js",

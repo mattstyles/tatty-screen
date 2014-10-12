@@ -1,11 +1,15 @@
+import { junk } from 'utils';
 import EventEmitter from 'eventEmitter';
 
-export default class Tatty extends EventEmitter {
+export default class Screen extends EventEmitter {
 
     /**
      * Attaches itself to the element supplied and gets ready to print
+     *
+     * @constructs
      */
     constructor( el, opts ) {
+
         this.parent = el;
         this.el = this.createElement();
         this.opts = Object.assign({
@@ -15,6 +19,7 @@ export default class Tatty extends EventEmitter {
 
         this.insertStyle();
 
+
         this.lines = [];
 
         // Set DOM styles
@@ -23,8 +28,12 @@ export default class Tatty extends EventEmitter {
         this.height = 'default';
         this.width = 'default';
 
-        for ( let y = 0; y < this.opts.rows; y ++ ) {
-            this.createLine();
+        // Create some junk lines to test the scrolling
+        for ( let y = 0; y < this.opts.rows + 10; y++ ) {
+            var self = this;
+            setTimeout( function() {
+                self.writeln( y + '&nbsp' + junk() );
+            }, 250 * y );
         }
     }
 
@@ -46,7 +55,7 @@ export default class Tatty extends EventEmitter {
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
-        console.log( chars.length );
+        // console.log( chars.length );
 
         var line = this.createLine();
         line.innerHTML = chars;
@@ -140,18 +149,35 @@ export default class Tatty extends EventEmitter {
         div.classList.add( 'line' );
         div.style.top = this.lineHeight * this.lines.length + 'px';
         div.style.width = this.width + 'px';
+
         this.el.appendChild( div );
         this.lines.push( div );
+
+        // Sort out tatty size
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.lines.length * this.lineHeight + 'px';
+
         this.showLastLine();
         return div;
     }
 
 
+    /**
+     * Calculates the last visible line and scrolls the pane to show it.
+     * Is not cross-browser.
+     */
     showLastLine() {
-        console.log( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) );
         this.el.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
+    }
+
+    /**
+     * Creates a prompt line and sets up the input field
+     */
+    prompt() {
+        var cmd = this.createLine();
+        cmd.innerHTML = '&nbsp>&nbsp';
+
+        this.trigger( 'prompt', [ true ] );
     }
 
     /**
@@ -183,11 +209,13 @@ export default class Tatty extends EventEmitter {
         head.appendChild( style );
     }
 
-
+    /**
+     * Creates the main tatty element and appends it to the viewport
+     */
     createElement() {
         var el = document.createElement( 'div' );
         el.classList.add( 'inner' );
         this.parent.appendChild( el );
         return el;
     }
-};
+}
