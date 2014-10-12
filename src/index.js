@@ -17,33 +17,41 @@ export default class Screen extends EventEmitter {
             rows: 24
         }, opts || {} );
 
-        this.insertStyle();
-
-
-        this.lines = [];
-
         // Set DOM styles
+        this.insertStyle();
         this.parent.classList.add( 'tatty' );
         this.lineHeight = 19;
         this.height = 'default';
         this.width = 'default';
 
-        // Create some junk lines to test the scrolling
-        for ( let y = 0; y < this.opts.rows + 10; y++ ) {
-            // this.writeln( y + '&nbsp' + junk() );
-        }
+        // Set initial lines
+        this.lines = [];
+        this.cursor = {
+            x: -1,
+            y: -1
+        };
     }
 
     /**
-     * Write the characters to the teleprinter.
-     * Maintains cursor position at the end of the current line.
+     * Write the characters to the teleprinter at the current cursor position.
      *
-     * @unimplemented
      * @param chars {String} the characters to print
      */
     write( chars ) {
-        console.log( chars );
-        this.trigger( 'write', [ chars ]);
+        chars = chars.replace( /\s/, '&nbsp' );
+
+        // If there are no lines then we need to create one
+        if ( this.cursor.x < 0 ) {
+            this.createLine();
+            this.cursor.x = 0;
+            this.cursor.y = 0;
+        }
+
+        var line = this.el.querySelectorAll( '.line' )[ this.cursor.y ];
+        var contents = line.innerHTML;
+
+        line.innerHTML = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length );
+        this.cursor.x += chars.length + 1;
     }
 
     /**
@@ -52,13 +60,18 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
+        chars = chars.replace( /\s/, '&nbsp' );
+
         // Split the input into separate lines to print
         var lines = this.splitLine( chars );
 
         for ( let i = 0; i < lines.length; i++ ) {
             var line = this.createLine();
             line.innerHTML = lines[ i ];
+            this.cursor.x = lines[ i ].length + 1;
         }
+
+        this.cursor.y += lines.length;
     }
 
     /*-----------------------------------------------------------*\
