@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Tatty</title>
     <style>
-        #main {
-
+        #tty {
+            background: #e4eaed;
         }
     </style>
 </head>
@@ -23,13 +23,16 @@
                 console.log( 'Bootstrapped' );
                 var Tatty = module.default;
 
-                window.tty = new Tatty( document.querySelector( '#tty' ) );
+                window.tty = new Tatty( document.querySelector( '#tty' ), {
+                    cols: 60,
+                    rows: 18
+                });
 
                 tty.write( 'I ❤︎ Harmony' );
                 tty.write( tty.bufferSize );
 
-                tty.writeln( 'this is a line' );
-                tty.writeln( 'here is another line' );
+                tty.writeln( 'hello world' );
+                tty.writeln( 'one two three' );
 
                 tty.prompt();
             });

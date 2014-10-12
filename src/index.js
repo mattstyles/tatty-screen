@@ -30,10 +30,7 @@ export default class Screen extends EventEmitter {
 
         // Create some junk lines to test the scrolling
         for ( let y = 0; y < this.opts.rows + 10; y++ ) {
-            var self = this;
-            setTimeout( function() {
-                self.writeln( y + '&nbsp' + junk() );
-            }, 250 * y );
+            // this.writeln( y + '&nbsp' + junk() );
         }
     }
 
@@ -55,10 +52,13 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
-        // console.log( chars.length );
+        // Split the input into separate lines to print
+        var lines = this.splitLine( chars );
 
-        var line = this.createLine();
-        line.innerHTML = chars;
+        for ( let i = 0; i < lines.length; i++ ) {
+            var line = this.createLine();
+            line.innerHTML = lines[ i ];
+        }
     }
 
     /*-----------------------------------------------------------*\
@@ -122,9 +122,9 @@ export default class Screen extends EventEmitter {
         var el = document.createElement( 'span' );
         el.style.opacity = 0;
         el.innerHTML = 'm';
-        document.body.appendChild( el );
+        this.parent.appendChild( el );
         var fontWidth = el.offsetWidth;
-        document.body.removeChild( el );
+        this.parent.removeChild( el );
         return fontWidth;
     }
 
@@ -217,5 +217,53 @@ export default class Screen extends EventEmitter {
         el.classList.add( 'inner' );
         this.parent.appendChild( el );
         return el;
+    }
+
+
+    /**
+     * Splits the input string into separate lines
+     *
+     * @param chars {String} characters to print to the screen
+     * @returns {Array} representing lines to print
+     */
+    splitLine( chars ) {
+        // If only one line then simply return
+        if ( chars.length <= this.opts.cols ) {
+            return [ chars ];
+        }
+
+        // Grabs the space character before the cut-off position, or returns -1 if there is no whitespace character
+        function findLastSpacePosition( start ) {
+            let i = start;
+            while( chars[ i ] !== ' ' ) {
+                i--;
+
+                // If not found then return -1
+                if ( i < 0 ) break;
+            }
+
+            // If not found then return the max number of chars per line
+            return i < 0 ? this.opts.cols : i;
+        }
+
+        // Actual string-slicing
+        function strip( start, end ) {
+            var tmp = chars.slice( start, end );
+            chars = chars.slice( end + 1, chars.length );
+            return tmp;
+        }
+
+        var output = [];
+
+        // Keep popping off a lines-worth of characters from the full string
+        while( chars.length > this.opts.cols ) {
+            // If a space exists then output up to the space, otherwise output the max number of chars for a line
+            output.push( strip( 0, findLastSpacePosition( this.opts.cols ) ) )
+        }
+
+        // Push the last one on
+        output.push( chars );
+
+        return output;
     }
 }
