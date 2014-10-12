@@ -74,7 +74,19 @@ export default class Screen extends EventEmitter {
             this.cursor.x = lines[ i ].length + 1;
         }
 
-        this.cursor.y += lines.length;
+        this.cursor.y = this.lines.length - 1;
+    }
+
+    /**
+     * Creates a prompt line and sets up the input field
+     */
+    prompt() {
+        var cmd = this.createLine();
+        cmd.innerHTML = '&nbsp>&nbsp';
+        this.cursor.y = this.lines.length - 1;
+        this.cursor.x = cmd.innerHTML.length + 1;
+
+        this.trigger( 'prompt', [ true ] );
     }
 
     /*-----------------------------------------------------------*\
@@ -186,15 +198,6 @@ export default class Screen extends EventEmitter {
         this.el.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
     }
 
-    /**
-     * Creates a prompt line and sets up the input field
-     */
-    prompt() {
-        var cmd = this.createLine();
-        cmd.innerHTML = '&nbsp>&nbsp';
-
-        this.trigger( 'prompt', [ true ] );
-    }
 
     /**
      * Inserts the main style for the tatty element
