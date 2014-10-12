@@ -49,8 +49,11 @@ export default class Screen extends EventEmitter {
 
         var line = this.el.querySelectorAll( '.line' )[ this.cursor.y ];
         var contents = line.innerHTML;
+        var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
 
-        line.innerHTML = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length );
+        // @TODO: newline may need to be split up into lines and replace the old single line if it becomes too long
+
+        line.innerHTML = newline;
         this.cursor.x += chars.length + 1;
     }
 
@@ -278,5 +281,16 @@ export default class Screen extends EventEmitter {
         output.push( chars );
 
         return output;
+    }
+
+
+    /**
+     * Clears the screen
+     */
+    clear() {
+        this.lines = [];
+        this.el.innerHTML = '';
+        this.cursor.x = -1;
+        this.cursor.y = -1;
     }
 }
