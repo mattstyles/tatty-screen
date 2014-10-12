@@ -11,7 +11,7 @@
   "author": "Matt Styles @personalurban",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mattstyles/tatty"
+    "url": "https://github.com/mattstyles/tatty-screen"
   },
   "license": "ISC",
   "devDependencies": {
