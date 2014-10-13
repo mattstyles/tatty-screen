@@ -14,7 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "eventEmitter": "~4.2.9",
-    "jquery": "~2.1.1"
+    "eventEmitter": "~4.2.9"
   }
 }
