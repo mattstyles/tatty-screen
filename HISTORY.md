@@ -1,3 +1,6 @@
+##
+
+* _fix_ - Prompt positioning
 
 ## 1.0.0 - 13.10.14
 

@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <title>Tatty</title>
     <style>
+        body {
+            background: black;
+        }
         #tty {
-            background: #e4eaed;
+            background: black;
+            color: #00ff33;
         }
     </style>
 </head>
@@ -33,6 +37,13 @@
 
                 tty.cursor.debug( 'cursor' );
 
+                tty.prompt();
+
+
+                document.addEventListener( 'keypress', function( event ) {
+                    event.preventDefault();
+                    tty.write( String.fromCharCode( event.keyCode ) );
+                });
             });
     </script>
 </body>

@@ -113,9 +113,12 @@ export default class Screen extends EventEmitter {
      */
     prompt() {
         var cmd = this.createLine();
-        cmd.innerHTML = ' > ';
+        cmd.innerHTML = '   ';
         this.cursor.y = this.lines.length - 1;
-        this.cursor.x = cmd.innerHTML.length + 1;
+        this.cursor.x = 3;
+
+        var promptElement = this.createPrompt();
+        promptElement.style.top = this.cursor.y * this.lineHeight + 'px';
 
         this.emit( 'prompt', true );
     }
@@ -309,6 +312,12 @@ export default class Screen extends EventEmitter {
                 left: 0;
                 border-left: 1px solid #888;
             }
+            .tatty .prompt {
+                position: absolute;
+                top: 0;
+                left: 0;
+                white-space: pre;
+            }
         `;
 
         var head = document.querySelector( 'head' );
@@ -338,6 +347,18 @@ export default class Screen extends EventEmitter {
         return cursor;
     }
 
+    /**
+     * Creates the element that houses the prompt.
+     * This simplifies using special characters like >
+     */
+    createPrompt() {
+        var prompt = document.createElement( 'div' );
+        prompt.classList.add( 'prompt' );
+        prompt.innerHTML = ' > ';
+        this.parent.appendChild( prompt );
+
+        return prompt;
+    }
 
     /**
      * Splits the input string into separate lines
