@@ -58,12 +58,14 @@ export default class Screen extends EventEmitter {
         var contents = line.innerHTML;
         var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
 
-        // line.innerHTML = newline;
-        this.cursor.x += chars.length + 1;
+        // Grab cursor offset from end of the line
+        var offset = contents.length - this.cursor.x;
+        this.cursor.x += chars.length;
 
         // newline replaces line, but lets check length
         if ( newline.length <= this.opts.cols ) {
             line.innerHTML = newline;
+            this.emit( 'prompt', false );
             return;
         }
 
@@ -79,9 +81,12 @@ export default class Screen extends EventEmitter {
             l.innerHTML = newlines[ i ];
             this.appendLine( l, this.cursor.y );
 
-            //@TODO: needs to correct the cursor position
             this.cursor.y++;
+            this.cursor.x = l.innerHTML.length - offset;
         }
+
+        this.cursor.y--;
+        this.emit( 'prompt', false );
     }
 
     /**
@@ -96,10 +101,11 @@ export default class Screen extends EventEmitter {
         for ( let i = 0; i < lines.length; i++ ) {
             var line = this.createLine();
             line.innerHTML = lines[ i ];
-            this.cursor.x = lines[ i ].length + 1;
+            this.cursor.x = lines[ i ].length;
         }
 
         this.cursor.y = this.lines.length - 1;
+        this.emit( 'prompt', false );
     }
 
     /**
@@ -111,7 +117,7 @@ export default class Screen extends EventEmitter {
         this.cursor.y = this.lines.length - 1;
         this.cursor.x = cmd.innerHTML.length + 1;
 
-        this.trigger( 'prompt', [ true ] );
+        this.emit( 'prompt', true );
     }
 
     /**
