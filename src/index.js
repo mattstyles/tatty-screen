@@ -38,7 +38,7 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     write( chars ) {
-        chars = chars.replace( /\s/, '&nbsp' );
+        // chars = chars.replace( /\s/, '&nbsp' );
 
         // If there are no lines then we need to create one
         if ( this.cursor.x < 0 ) {
@@ -53,8 +53,30 @@ export default class Screen extends EventEmitter {
 
         // @TODO: newline may need to be split up into lines and replace the old single line if it becomes too long
 
-        line.innerHTML = newline;
+        // line.innerHTML = newline;
         this.cursor.x += chars.length + 1;
+
+        // newline replaces line, but lets check length
+        if ( newline.length <= this.opts.cols ) {
+            line.innerHTML = newline;
+            return;
+        }
+
+        // If we got here then we need to split and replace and then update cursor position
+        var newlines = this.splitLine( newline );
+
+        // remove current line then attach the new lines
+        this.lines.splice( this.cursor.y, 1 );
+        for ( let i = 0; i < newlines.length; i++ ) {
+            var l = this.createLine({
+                append: false
+            });
+            l.innerHTML = newlines[ i ];
+            this.appendLine( l, this.cursor.y );
+
+            //@TODO: needs to correct the cursor position
+            this.cursor.y++;
+        }
     }
 
     /**
@@ -63,7 +85,7 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
-        chars = chars.replace( /\s/, '&nbsp' );
+        // chars = chars.replace( /\s/, '&nbsp' );
 
         // Split the input into separate lines to print
         var lines = this.splitLine( chars );
@@ -172,21 +194,42 @@ export default class Screen extends EventEmitter {
     /**
      * Creates a new line and appends it
      */
-    createLine() {
+    createLine( options ) {
+        var opts = Object.assign({
+            append: true
+        }, options || {} );
+
         var div = document.createElement( 'div' );
         div.classList.add( 'line' );
         div.style.top = this.lineHeight * this.lines.length + 'px';
         div.style.width = this.width + 'px';
 
+        if ( opts.append ) {
+            this.appendLine( div, this.lines.length );
+        }
+
+        return div;
+    }
+
+
+    /**
+     * Appends the line to a specific place
+     */
+    appendLine( div, position=this.lines.length ) {
         this.el.appendChild( div );
-        this.lines.push( div );
+
+        if ( position > this.lines.length ) {
+            this.lines.push( div );
+        } else {
+            this.lines.splice( position, 0, div );
+            this.resetLines();
+        }
 
         // Sort out tatty size
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.lines.length * this.lineHeight + 'px';
 
         this.showLastLine();
-        return div;
     }
 
 
@@ -196,6 +239,20 @@ export default class Screen extends EventEmitter {
      */
     showLastLine() {
         this.el.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
+    }
+
+
+    /**
+     * Resets all of the line positions
+     */
+    resetLines() {
+        this.el.innerHTML = '';
+
+        for ( let i = 0; i < this.lines.length; i++ ) {
+            this.lines[ i ].style.width = this.width + 'px';
+            this.lines[ i ].style.top = i * this.lineHeight + 'px';
+            this.el.appendChild( this.lines[ i ] );
+        }
     }
 
 
