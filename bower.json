@@ -1,17 +1,28 @@
 {
   "name": "tattyScreen",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "main": "dist/index.js",
   "authors": [
     "mattstyles <matt@veryfizzyjelly.com>"
   ],
-  "license": "ISC",
-  "private": true,
+  "keywords": [
+    "es6",
+    "screen",
+    "printer",
+    "tty",
+    "teleprinter"
+  ],
+  "license": "WTFPL",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "dist/common",
+    "build",
+    "index.html",
+    "src"
   ],
   "dependencies": {
     "EventEmitter": "git://github.com/primus/EventEmitter3.git#master"

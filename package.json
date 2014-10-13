@@ -1,19 +1,29 @@
 {
   "name": "tattyScreen",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "ES6 green-screen teleprinter",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "watch": "./build/watch.js",
     "build": "./build/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Styles @personalurban",
+  "keywords": [
+    "es6",
+    "screen",
+    "printer",
+    "tty",
+    "teleprinter"      
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mattstyles/tatty-screen"
   },
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattstyles/tatty-screen/issues"
+  },
+  "license": "WTFPL",
   "devDependencies": {
     "es6-module-loader": "^0.9.2",
     "systemjs": "^0.9.1",
