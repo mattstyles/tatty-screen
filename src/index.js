@@ -1,5 +1,5 @@
-import { junk } from 'utils';
-import EventEmitter from 'eventEmitter';
+import { Point } from 'utils';
+import EventEmitter from 'EventEmitter';
 
 export default class Screen extends EventEmitter {
 
@@ -10,26 +10,35 @@ export default class Screen extends EventEmitter {
      */
     constructor( el, opts ) {
 
-        this.parent = el;
-        this.el = this.createElement();
         this.opts = Object.assign({
             cols: 80,
             rows: 24
         }, opts || {} );
 
         // Set DOM styles
+        this.parent = el;
+        this.el = this.createElement();
         this.insertStyle();
         this.parent.classList.add( 'tatty' );
         this.lineHeight = 19;
         this.height = 'default';
         this.width = 'default';
+        this.cursorElement = this.createCursor();
 
         // Set initial lines
         this.lines = [];
-        this.cursor = {
+        this.cursor = new Point({
             x: -1,
             y: -1
-        };
+        });
+
+        this.cursor.on( 'changeX', function() {
+            this.cursorElement.style.left = this.cursor.x * this.charWidth + 'px';
+        }, this );
+
+        this.cursor.on( 'changeY', function() {
+            this.cursorElement.style.top = this.cursor.y * this.lineHeight + 'px';
+        }, this );
     }
 
     /**
@@ -38,8 +47,6 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     write( chars ) {
-        // chars = chars.replace( /\s/, '&nbsp' );
-
         // If there are no lines then we need to create one
         if ( this.cursor.x < 0 ) {
             this.createLine();
@@ -50,8 +57,6 @@ export default class Screen extends EventEmitter {
         var line = this.el.querySelectorAll( '.line' )[ this.cursor.y ];
         var contents = line.innerHTML;
         var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
-
-        // @TODO: newline may need to be split up into lines and replace the old single line if it becomes too long
 
         // line.innerHTML = newline;
         this.cursor.x += chars.length + 1;
@@ -85,8 +90,6 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
-        // chars = chars.replace( /\s/, '&nbsp' );
-
         // Split the input into separate lines to print
         var lines = this.splitLine( chars );
 
@@ -104,11 +107,25 @@ export default class Screen extends EventEmitter {
      */
     prompt() {
         var cmd = this.createLine();
-        cmd.innerHTML = '&nbsp>&nbsp';
+        cmd.innerHTML = ' > ';
         this.cursor.y = this.lines.length - 1;
         this.cursor.x = cmd.innerHTML.length + 1;
 
         this.trigger( 'prompt', [ true ] );
+    }
+
+    /**
+     * Sets the cursor position
+     */
+    setCursor( x=0, y=0 ) {
+        if ( typeof x === 'object' || typeof x === 'Point' ) {
+            this.cursor.x = x.x;
+            this.cursor.y = x.y;
+            return;
+        }
+
+        this.cursor.x = x;
+        this.cursor.y = y;
     }
 
     /*-----------------------------------------------------------*\
@@ -278,6 +295,13 @@ export default class Screen extends EventEmitter {
             }
             .tatty .line {
                 position: absolute;
+                white-space: pre;
+            }
+            .tatty .cursor {
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-left: 1px solid #888;
             }
         `;
 
@@ -292,7 +316,20 @@ export default class Screen extends EventEmitter {
         var el = document.createElement( 'div' );
         el.classList.add( 'inner' );
         this.parent.appendChild( el );
+
         return el;
+    }
+
+    /**
+     * Creates the cursor element
+     */
+    createCursor() {
+        var cursor = document.createElement( 'div' );
+        cursor.classList.add( 'cursor' );
+        cursor.style.height = this.lineHeight + 'px';
+        this.parent.appendChild( cursor );
+
+        return cursor;
     }
 
 
