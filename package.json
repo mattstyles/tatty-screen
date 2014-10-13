@@ -1,5 +1,5 @@
 {
-  "name": "tattyScreen",
+  "name": "tatty-screen",
   "version": "1.0.0",
   "description": "ES6 green-screen teleprinter",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
     "screen",
     "printer",
     "tty",
-    "teleprinter"      
+    "teleprinter"
   ],
   "repository": {
     "type": "git",
