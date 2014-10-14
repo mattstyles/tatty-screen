@@ -23,7 +23,7 @@
     "build",
     "index.html"
   ],
-  "dependencies": {
+  "devDependencies": {
     "EventEmitter": "git://github.com/primus/EventEmitter3.git#master"
   }
 }
