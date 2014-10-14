@@ -67,7 +67,8 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           this.opts = Object.assign({
             cols: 80,
             rows: 24,
-            scanlines: true
+            overlay: true,
+            overlayOffset: 3
           }, opts || {});
           this.parent = el;
           this.el = this.createElement();
@@ -85,8 +86,8 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             y: -1
           });
           this.flashCursor();
-          if (this.opts.scanlines) {
-            this.overlay = this.createScanlines();
+          if (this.opts.overlay) {
+            this.overlay = this.createOverlay();
           }
           this.cursor.on('changeX', function() {
             this.cursorElement.style.left = this.cursor.x * this.charWidth + 'px';
@@ -313,17 +314,18 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.parent.removeChild(el);
             return fontWidth;
           },
-          createScanlines: function() {
+          createOverlay: function() {
             var canvas = document.createElement('canvas');
-            canvas.width = 1;
-            canvas.height = 3;
-            var ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 2, 1, 1);
             var overlay = document.createElement('div');
             overlay.classList.add('overlay');
-            overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
             this.parent.appendChild(overlay);
+            var style = window.getComputedStyle(overlay, null);
+            canvas.width = 1;
+            canvas.height = this.opts.overlayOffset;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = style.color || '#fff';
+            ctx.fillRect(0, this.opts.overlayOffset - 1, 1, 1);
+            overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
             return overlay;
           }
         }, {}, $__super);

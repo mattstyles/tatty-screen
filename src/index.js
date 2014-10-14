@@ -13,7 +13,8 @@ export default class Screen extends EventEmitter {
         this.opts = Object.assign({
             cols: 80,
             rows: 24,
-            scanlines: true
+            overlay: true,
+            overlayOffset: 3
         }, opts || {} );
 
 
@@ -38,8 +39,8 @@ export default class Screen extends EventEmitter {
         });
         this.flashCursor();
 
-        if ( this.opts.scanlines ) {
-            this.overlay = this.createScanlines();
+        if ( this.opts.overlay ) {
+            this.overlay = this.createOverlay();
         }
 
         /**
@@ -484,19 +485,22 @@ export default class Screen extends EventEmitter {
     /**
      * Create scanlines
      */
-    createScanlines() {
+    createOverlay() {
         var canvas = document.createElement( 'canvas' );
-        canvas.width = 1;
-        canvas.height = 3;
-        var ctx = canvas.getContext( '2d' );
-
-        ctx.fillStyle = '#000';
-        ctx.fillRect( 0, 2, 1, 1 );
-
         var overlay = document.createElement( 'div' );
         overlay.classList.add( 'overlay' );
-        overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
         this.parent.appendChild( overlay );
+
+        var style = window.getComputedStyle( overlay, null );
+
+        canvas.width = 1;
+        canvas.height = this.opts.overlayOffset;
+        var ctx = canvas.getContext( '2d' );
+
+        ctx.fillStyle = style.color || '#fff';
+        ctx.fillRect( 0, this.opts.overlayOffset - 1, 1, 1 );
+
+        overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
 
         return overlay;
     }

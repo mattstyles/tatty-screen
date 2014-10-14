@@ -11,13 +11,19 @@
             background: black;
             color: #00ff33;
 
-            font-size: 20px;
-            line-height: 24px;
+            font-size: 14px;
+            line-height: 18px;
         }
 
         #tty .cursor {
             border-left: 1px solid #00ff33;
         }
+
+        #tty .overlay {
+            color: #000
+        }
+
+    }
     </style>
 </head>
 <body>
@@ -36,7 +42,8 @@
 
                 window.tty = new Tatty( document.querySelector( '#tty' ), {
                     cols: 20,
-                    rows: 18
+                    rows: 18,
+                    overlayOffset: 3
                 });
 
 
