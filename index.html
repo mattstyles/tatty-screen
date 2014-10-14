@@ -45,6 +45,13 @@
                     event.preventDefault();
                     tty.write( String.fromCharCode( event.keyCode ) );
                 });
+
+                document.addEventListener( 'keydown', function( event ) {
+                    // Prevents backspace
+                    if ( event.keyCode === 8 ) {
+                        event.preventDefault();
+                    }
+                });
             });
     </script>
 </body>

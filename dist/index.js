@@ -88,10 +88,17 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           this.cursor.on('changeY', function() {
             this.cursorElement.style.top = this.cursor.y * this.lineHeight + 'px';
           }, this);
+          this.on('prompt', function(flag) {
+            this.emit('showCursor', flag);
+          }, this);
           this.on('showCursor', function(flag) {
             if (!flag && this.cursorTimer) {
               clearTimeout(this.cursorTimer);
+              this.cursorElement.classList.add('hidden');
               this.cursorTimer = null;
+              return;
+            }
+            if (!flag) {
               return;
             }
             this.flashCursor();
