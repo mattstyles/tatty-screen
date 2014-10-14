@@ -1,6 +1,7 @@
-##
+## 1.0.1 - 14.10.14
 
 * _fix_ - Prompt positioning
+* _fix_ - bower distribution
 
 ## 1.0.0 - 13.10.14
 
