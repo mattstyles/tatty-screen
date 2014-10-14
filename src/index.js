@@ -31,13 +31,27 @@ export default class Screen extends EventEmitter {
             x: -1,
             y: -1
         });
+        this.flashCursor();
 
+        /**
+         * Events
+         */
         this.cursor.on( 'changeX', function() {
             this.cursorElement.style.left = this.cursor.x * this.charWidth + 'px';
         }, this );
 
         this.cursor.on( 'changeY', function() {
             this.cursorElement.style.top = this.cursor.y * this.lineHeight + 'px';
+        }, this );
+
+        this.on( 'showCursor', function( flag ) {
+            if ( !flag && this.cursorTimer ) {
+                clearTimeout( this.cursorTimer );
+                this.cursorTimer = null;
+                return;
+            }
+
+            this.flashCursor();
         }, this );
     }
 
@@ -312,6 +326,9 @@ export default class Screen extends EventEmitter {
                 left: 0;
                 border-left: 1px solid #888;
             }
+            .tatty .cursor.hidden {
+                display: none;
+            }
             .tatty .prompt {
                 position: absolute;
                 top: 0;
@@ -416,5 +433,21 @@ export default class Screen extends EventEmitter {
         this.el.innerHTML = '';
         this.cursor.x = -1;
         this.cursor.y = -1;
+    }
+
+    /**
+     * Initiates the cursor flash
+     */
+    flashCursor() {
+        if ( this.cursorTimer ) return;
+
+        var toggle = function() {
+            return setTimeout( function() {
+                this.cursorElement.classList.toggle( 'hidden' );
+                this.cursorTimer = toggle();
+            }.bind( this ), 350 );
+        }.bind( this );
+
+        this.cursorTimer = toggle();
     }
 }

@@ -11,6 +11,10 @@
             background: black;
             color: #00ff33;
         }
+
+        #tty .cursor {
+            border-left: 1px solid #00ff33;
+        }
     </style>
 </head>
 <body>
@@ -34,9 +38,6 @@
 
 
                 tty.writeln( 'I ❤︎ Harmony' );
-
-                tty.cursor.debug( 'cursor' );
-
                 tty.prompt();
 
 

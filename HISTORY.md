@@ -1,3 +1,7 @@
+##
+
+* _add_ - cursor flash
+
 ## 1.0.1 - 14.10.14
 
 * _fix_ - Prompt positioning
