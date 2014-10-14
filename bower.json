@@ -21,8 +21,7 @@
     "tests",
     "dist/common",
     "build",
-    "index.html",
-    "src"
+    "index.html"
   ],
   "dependencies": {
     "EventEmitter": "git://github.com/primus/EventEmitter3.git#master"
