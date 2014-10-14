@@ -153,6 +153,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           prompt: function() {
             var cmd = this.createLine();
             cmd.innerHTML = '   ';
+            cmd.classList.add('prompt');
             this.cursor.y = this.lines.length - 1;
             this.cursor.x = 3;
             var promptElement = this.createPrompt();
@@ -171,6 +172,9 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.cursor.y = y;
           },
           del: function() {
+            if (this.lines[this.cursor.y].className.match(/prompt/) && this.cursor.x === 3) {
+              return;
+            }
             if (this.cursor.x === 0) {
               if (this.cursor.y === 0)
                 return;

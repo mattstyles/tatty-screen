@@ -1,3 +1,7 @@
+##
+
+* _add_ - delete character behind cursor
+
 ## 1.1.0 - 14.10.14
 
 * _add_ - cursor flash

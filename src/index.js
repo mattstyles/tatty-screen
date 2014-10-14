@@ -147,6 +147,7 @@ export default class Screen extends EventEmitter {
     prompt() {
         var cmd = this.createLine();
         cmd.innerHTML = '   ';
+        cmd.classList.add( 'prompt' );
         this.cursor.y = this.lines.length - 1;
         this.cursor.x = 3;
 
@@ -174,6 +175,12 @@ export default class Screen extends EventEmitter {
      * Removes the previous character
      */
     del() {
+        // Check if we're at the start of a command prompt
+        if ( this.lines[ this.cursor.y ].className.match( /prompt/ ) && this.cursor.x === 3 ) {
+            return;
+        }
+
+        // Check if we need to move up and back
         if ( this.cursor.x === 0 ) {
             if ( this.cursor.y === 0 ) return;
 
