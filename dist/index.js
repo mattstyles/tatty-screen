@@ -114,18 +114,26 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
         return ($traceurRuntime.createClass)(Screen, {
           write: function(chars) {
             var offset$__1;
+            var offset$__2;
             if (this.cursor.x < 0) {
               this.createLine();
               this.cursor.x = 0;
               this.cursor.y = 0;
             }
+            if (this.cursor.y > this.lines.length) {
+              offset$__1 = (this.cursor.y - this.lines.length) + 1;
+              while (offset$__1) {
+                this.createLine();
+                offset$__1--;
+              }
+            }
             var line = this.lines[this.cursor.y];
             var contents = line.innerHTML;
             if (this.cursor.x > contents.length) {
-              offset$__1 = this.cursor.x - contents.length;
-              while (offset$__1) {
+              offset$__2 = this.cursor.x - contents.length;
+              while (offset$__2) {
                 contents = contents.concat(' ');
-                offset$__1--;
+                offset$__2--;
               }
             }
             var newline = contents.slice(0, this.cursor.x) + chars + contents.slice(this.cursor.x, contents.length);

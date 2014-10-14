@@ -54,7 +54,7 @@
                 //tty.writeln( 'I ❤︎ Harmony' );
                 //tty.prompt();
                 //tty.write( 'info' );
-                tty.writeln( 'You are encouraged to share this program with other users.' );
+                /*tty.writeln( 'You are encouraged to share this program with other users.' );
                 tty.prompt();
                 tty.setCursor( 18,1 );
                 tty.write( 'Contra ' );
@@ -62,6 +62,18 @@
                 tty.write( ' Avenue.' );
                 tty.setCursor( 3, 2 );
                 tty.emit( 'showCursor', true );
+                */
+
+                //tty.setCursor( 12, 24 );
+                tty.write( '¢' );
+
+                for ( var x = 0; x < 20; x++ ) {
+                    tty.setCursor( (Math.random()*40) | 0, (Math.random()*23) | 0 );
+                    tty.write( '#' );
+                }
+
+                tty.writeln( '' );
+                tty.prompt();
 
 
 

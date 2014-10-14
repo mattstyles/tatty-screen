@@ -90,6 +90,15 @@ export default class Screen extends EventEmitter {
             this.cursor.y = 0;
         }
 
+        // If there are not enough lines to satisfy this cursor position then create them
+        if ( this.cursor.y > this.lines.length ) {
+            let offset = ( this.cursor.y - this.lines.length ) + 1;
+            while( offset ) {
+                this.createLine();
+                offset--;
+            }
+        }
+
         // Grab the line and contents
         var line = this.lines[ this.cursor.y ];
         var contents = line.innerHTML;
