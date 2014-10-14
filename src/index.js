@@ -87,7 +87,7 @@ export default class Screen extends EventEmitter {
             this.cursor.y = 0;
         }
 
-        var line = this.el.querySelectorAll( '.line' )[ this.cursor.y ];
+        var line = this.lines[ this.cursor.y ];
         var contents = line.innerHTML;
         var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
 
@@ -168,6 +168,24 @@ export default class Screen extends EventEmitter {
 
         this.cursor.x = x;
         this.cursor.y = y;
+    }
+
+    /**
+     * Removes the previous character
+     */
+    del() {
+        if ( this.cursor.x === 0 ) {
+            if ( this.cursor.y === 0 ) return;
+
+            this.cursor.y--;
+            this.cursor.x = this.lines[ this.cursor.y ].innerHTML.length;
+        }
+
+        var line = this.lines[ this.cursor.y ];
+        var newline = line.innerHTML.slice( 0, line.innerHTML.length - 1 );
+        line.innerHTML = newline;
+
+        this.cursor.x--;
     }
 
     /*-----------------------------------------------------------*\
