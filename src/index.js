@@ -15,14 +15,17 @@ export default class Screen extends EventEmitter {
             rows: 24
         }, opts || {} );
 
+
         // Set DOM styles
         this.parent = el;
         this.el = this.createElement();
         this.insertStyle();
         this.parent.classList.add( 'tatty' );
-        this.lineHeight = 19;
+        var style = window.getComputedStyle( this.parent );
+        this.lineHeight = style.lineHeight.replace( /px/, '' ) | 0;
         this.height = 'default';
         this.width = 'default';
+        this.charWidth = this.getCharWidth();
         this.cursorElement = this.createCursor();
 
         // Set initial lines
@@ -211,20 +214,7 @@ export default class Screen extends EventEmitter {
     get width() {
         if ( !this.el ) return;
 
-        return ~~this.parent.style.width.replace( 'px', '' );
-    }
-
-    /**
-     * Calculates the char width based on the width of the current 'm' character
-     */
-    get charWidth() {
-        var el = document.createElement( 'span' );
-        el.style.opacity = 0;
-        el.innerHTML = 'm';
-        this.parent.appendChild( el );
-        var fontWidth = el.offsetWidth;
-        this.parent.removeChild( el );
-        return fontWidth;
+        return this.parent.style.width.replace( /px/, '' ) | 0;
     }
 
     /**
@@ -318,6 +308,7 @@ export default class Screen extends EventEmitter {
                 color: #333a3c;
                 font-family: 'Source Code Pro';
                 font-size: 15px;
+                line-height: 19px;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
                 overflow: hidden;
@@ -458,5 +449,18 @@ export default class Screen extends EventEmitter {
         }.bind( this );
 
         this.cursorTimer = toggle();
+    }
+
+    /**
+     * Calculates the char width based on the width of the current 'm' character
+     */
+    getCharWidth() {
+        var el = document.createElement( 'span' );
+        el.style.opacity = 0;
+        el.innerHTML = 'm';
+        this.parent.appendChild( el );
+        var fontWidth = el.offsetWidth;
+        this.parent.removeChild( el );
+        return fontWidth;
     }
 }

@@ -72,9 +72,11 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           this.el = this.createElement();
           this.insertStyle();
           this.parent.classList.add('tatty');
-          this.lineHeight = 19;
+          var style = window.getComputedStyle(this.parent);
+          this.lineHeight = style.lineHeight.replace(/px/, '') | 0;
           this.height = 'default';
           this.width = 'default';
+          this.charWidth = this.getCharWidth();
           this.cursorElement = this.createCursor();
           this.lines = [];
           this.cursor = new Point({
@@ -189,16 +191,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           get width() {
             if (!this.el)
               return;
-            return ~~this.parent.style.width.replace('px', '');
-          },
-          get charWidth() {
-            var el = document.createElement('span');
-            el.style.opacity = 0;
-            el.innerHTML = 'm';
-            this.parent.appendChild(el);
-            var fontWidth = el.offsetWidth;
-            this.parent.removeChild(el);
-            return fontWidth;
+            return this.parent.style.width.replace(/px/, '') | 0;
           },
           get bufferSize() {
             return this.opts.cols * this.opts.rows;
@@ -241,7 +234,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           insertStyle: function() {
             var style = document.createElement('style');
             style.id = 'tatty';
-            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro';\n                font-size: 15px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n        ";
+            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro';\n                font-size: 15px;\n                line-height: 19px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n        ";
             var head = document.querySelector('head');
             head.appendChild(style);
           },
@@ -306,6 +299,15 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
               }.bind(this), 350);
             }.bind(this);
             this.cursorTimer = toggle();
+          },
+          getCharWidth: function() {
+            var el = document.createElement('span');
+            el.style.opacity = 0;
+            el.innerHTML = 'm';
+            this.parent.appendChild(el);
+            var fontWidth = el.offsetWidth;
+            this.parent.removeChild(el);
+            return fontWidth;
           }
         }, {}, $__super);
       }(EventEmitter)));
