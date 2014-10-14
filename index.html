@@ -9,18 +9,21 @@
         }
         #tty {
             background: black;
-            color: #00ff33;
+            color: #ccc;
 
-            font-size: 14px;
-            line-height: 18px;
+            font-family: 'Perfect DOS VGA 437';
+            font-size: 19px;
+            line-height: 21px;
+            letter-spacing: -1px;
         }
 
         #tty .cursor {
-            border-left: 1px solid #00ff33;
+            border-left: 1px solid #888;
         }
 
         #tty .overlay {
-            color: #000
+            color: #000;
+            opacity: .2;
         }
 
     }
@@ -41,13 +44,17 @@
                 var Tatty = module.default;
 
                 window.tty = new Tatty( document.querySelector( '#tty' ), {
-                    cols: 20,
+                    cols: 52,
                     rows: 18,
-                    overlayOffset: 3
+                    overlayOffset: 3,
+                    overlay: false
                 });
 
 
                 tty.writeln( 'I ❤︎ Harmony' );
+                tty.prompt();
+                tty.write( 'info' );
+                tty.writeln( 'You are encouraged to share this program with other users.' );
                 tty.prompt();
 
 

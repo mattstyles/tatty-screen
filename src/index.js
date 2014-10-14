@@ -25,10 +25,10 @@ export default class Screen extends EventEmitter {
         this.parent.classList.add( 'tatty' );
 
         var style = window.getComputedStyle( this.parent );
+        this.charWidth = this.getCharWidth();
         this.lineHeight = style.lineHeight.replace( /px/, '' ) | 0;
         this.height = 'default';
         this.width = 'default';
-        this.charWidth = this.getCharWidth();
         this.cursorElement = this.createCursor();
 
         // Set initial lines
@@ -221,7 +221,7 @@ export default class Screen extends EventEmitter {
     get width() {
         if ( !this.el ) return;
 
-        return this.parent.style.width.replace( /px/, '' ) | 0;
+        return ~~this.parent.style.width.replace( 'px', '' );
     }
 
     /**

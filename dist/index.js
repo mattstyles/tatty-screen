@@ -75,10 +75,10 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           this.insertStyle();
           this.parent.classList.add('tatty');
           var style = window.getComputedStyle(this.parent);
+          this.charWidth = this.getCharWidth();
           this.lineHeight = style.lineHeight.replace(/px/, '') | 0;
           this.height = 'default';
           this.width = 'default';
-          this.charWidth = this.getCharWidth();
           this.cursorElement = this.createCursor();
           this.lines = [];
           this.cursor = new Point({
@@ -196,7 +196,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           get width() {
             if (!this.el)
               return;
-            return this.parent.style.width.replace(/px/, '') | 0;
+            return ~~this.parent.style.width.replace('px', '');
           },
           get bufferSize() {
             return this.opts.cols * this.opts.rows;
