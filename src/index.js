@@ -12,7 +12,8 @@ export default class Screen extends EventEmitter {
 
         this.opts = Object.assign({
             cols: 80,
-            rows: 24
+            rows: 24,
+            scanlines: true
         }, opts || {} );
 
 
@@ -21,6 +22,7 @@ export default class Screen extends EventEmitter {
         this.el = this.createElement();
         this.insertStyle();
         this.parent.classList.add( 'tatty' );
+
         var style = window.getComputedStyle( this.parent );
         this.lineHeight = style.lineHeight.replace( /px/, '' ) | 0;
         this.height = 'default';
@@ -35,6 +37,10 @@ export default class Screen extends EventEmitter {
             y: -1
         });
         this.flashCursor();
+
+        if ( this.opts.scanlines ) {
+            this.overlay = this.createScanlines();
+        }
 
         /**
          * Events
@@ -335,6 +341,16 @@ export default class Screen extends EventEmitter {
                 left: 0;
                 white-space: pre;
             }
+            .tatty .overlay {
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                pointer-events: none;
+                background-repeat: repeat;
+                opacity: .3;
+            }
         `;
 
         var head = document.querySelector( 'head' );
@@ -462,5 +478,26 @@ export default class Screen extends EventEmitter {
         var fontWidth = el.offsetWidth;
         this.parent.removeChild( el );
         return fontWidth;
+    }
+
+
+    /**
+     * Create scanlines
+     */
+    createScanlines() {
+        var canvas = document.createElement( 'canvas' );
+        canvas.width = 1;
+        canvas.height = 3;
+        var ctx = canvas.getContext( '2d' );
+
+        ctx.fillStyle = '#000';
+        ctx.fillRect( 0, 2, 1, 1 );
+
+        var overlay = document.createElement( 'div' );
+        overlay.classList.add( 'overlay' );
+        overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
+        this.parent.appendChild( overlay );
+
+        return overlay;
     }
 }

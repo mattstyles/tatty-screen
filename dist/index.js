@@ -66,7 +66,8 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
         var Screen = function Screen(el, opts) {
           this.opts = Object.assign({
             cols: 80,
-            rows: 24
+            rows: 24,
+            scanlines: true
           }, opts || {});
           this.parent = el;
           this.el = this.createElement();
@@ -84,6 +85,9 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             y: -1
           });
           this.flashCursor();
+          if (this.opts.scanlines) {
+            this.overlay = this.createScanlines();
+          }
           this.cursor.on('changeX', function() {
             this.cursorElement.style.left = this.cursor.x * this.charWidth + 'px';
           }, this);
@@ -234,7 +238,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           insertStyle: function() {
             var style = document.createElement('style');
             style.id = 'tatty';
-            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro';\n                font-size: 15px;\n                line-height: 19px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n        ";
+            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro';\n                font-size: 15px;\n                line-height: 19px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n            .tatty .overlay {\n                position: absolute;\n                left: 0;\n                top: 0;\n                right: 0;\n                bottom: 0;\n                pointer-events: none;\n                background-repeat: repeat;\n                opacity: .3;\n            }\n        ";
             var head = document.querySelector('head');
             head.appendChild(style);
           },
@@ -308,6 +312,19 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             var fontWidth = el.offsetWidth;
             this.parent.removeChild(el);
             return fontWidth;
+          },
+          createScanlines: function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 3;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 2, 1, 1);
+            var overlay = document.createElement('div');
+            overlay.classList.add('overlay');
+            overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
+            this.parent.appendChild(overlay);
+            return overlay;
           }
         }, {}, $__super);
       }(EventEmitter)));
