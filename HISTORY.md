@@ -2,6 +2,8 @@
 
 * _add_ - delete character behind cursor
 * _add_ - write beyond the line length
+* _add_ - puts alias
+* _add_ - ins alias
 
 ## 1.1.0 - 14.10.14
 

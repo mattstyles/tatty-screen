@@ -68,6 +68,7 @@
                 document.addEventListener( 'keypress', function( event ) {
                     event.preventDefault();
                     tty.write( String.fromCharCode( event.keyCode ) );
+                    tty.emit( 'showCursor', true );
                 });
 
                 document.addEventListener( 'keydown', function( event ) {

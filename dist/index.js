@@ -194,6 +194,12 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             line.innerHTML = newline;
             this.cursor.x--;
           },
+          puts: function() {
+            this.writeln.apply(this, arguments);
+          },
+          ins: function() {
+            this.write.apply(this, arguments);
+          },
           set height(h) {
             if (!this.el)
               return;
@@ -291,6 +297,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             if (chars.length <= this.opts.cols) {
               return [chars];
             }
+            var self = this;
             function findLastSpacePosition(start) {
               var i = start;
               while (chars[i] !== ' ') {
@@ -298,7 +305,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
                 if (i < 0)
                   break;
               }
-              return i < 0 ? this.opts.cols : i;
+              return i < 0 ? self.opts.cols : i;
             }
             function strip(start, end) {
               var tmp = chars.slice(start, end);

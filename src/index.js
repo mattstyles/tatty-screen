@@ -76,6 +76,9 @@ export default class Screen extends EventEmitter {
 
     /**
      * Write the characters to the teleprinter at the current cursor position.
+     * Writing characters will kill the cursor visibility, but this works out well as
+     * the cursor drops during type operations - it is then up to the callee to reinstate
+     * the cursor when input has finished.
      *
      * @param chars {String} the characters to print
      */
@@ -205,6 +208,20 @@ export default class Screen extends EventEmitter {
         line.innerHTML = newline;
 
         this.cursor.x--;
+    }
+
+    /**
+     * Puts alias - for writeln
+     */
+    puts() {
+        this.writeln.apply( this, arguments );
+    }
+
+    /**
+     * Ins alias - for write
+     */
+    ins() {
+        this.write.apply( this, arguments );
     }
 
     /*-----------------------------------------------------------*\
@@ -443,6 +460,8 @@ export default class Screen extends EventEmitter {
             return [ chars ];
         }
 
+        var self = this;
+
         // Grabs the space character before the cut-off position, or returns -1 if there is no whitespace character
         function findLastSpacePosition( start ) {
             let i = start;
@@ -454,7 +473,7 @@ export default class Screen extends EventEmitter {
             }
 
             // If not found then return the max number of chars per line
-            return i < 0 ? this.opts.cols : i;
+            return i < 0 ? self.opts.cols : i;
         }
 
         // Actual string-slicing
