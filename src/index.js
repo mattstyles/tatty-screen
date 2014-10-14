@@ -87,8 +87,20 @@ export default class Screen extends EventEmitter {
             this.cursor.y = 0;
         }
 
+        // Grab the line and contents
         var line = this.lines[ this.cursor.y ];
         var contents = line.innerHTML;
+
+        // If the cursor is positioned beyond the end of a line then extend the line
+        if ( this.cursor.x > contents.length ) {
+            let offset = this.cursor.x - contents.length;
+            while ( offset ) {
+                contents = contents.concat( ' ' );
+                offset--;
+            }
+        }
+
+
         var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
 
         // Grab cursor offset from end of the line

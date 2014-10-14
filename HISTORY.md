@@ -1,6 +1,7 @@
 ##
 
 * _add_ - delete character behind cursor
+* _add_ - write beyond the line length
 
 ## 1.1.0 - 14.10.14
 
