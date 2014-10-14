@@ -1,6 +1,9 @@
-##
+## 1.1.0 - 14.10.14
 
 * _add_ - cursor flash
+* _add_ - overlay scanlines
+* _add_ - set line height
+* _add_ - set font height
 
 ## 1.0.1 - 14.10.14
 
