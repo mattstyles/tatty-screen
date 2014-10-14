@@ -313,7 +313,7 @@ export default class Screen extends EventEmitter {
                 position: relative;
                 background:white;
                 color: #333a3c;
-                font-family: 'Source Code Pro';
+                font-family: 'Source Code Pro', monospace;
                 font-size: 15px;
                 line-height: 19px;
                 -webkit-font-smoothing: antialiased;
