@@ -648,17 +648,19 @@ export default class Screen extends EventEmitter {
      */
     registerModules( modules ) {
         modules.forEach( function( module ) {
-            // if ( typeof module !== 'tattyScreenModule' ) {
-            //     console.log( 'Error trying to attach module to tatty-screen' );
-            // }
+            if ( typeof module !== 'tattyScreenModule' ) {
+                console.log( 'Error trying to attach module to tatty-screen' );
+            }
 
             if ( module.init ) {
                 module.init.call( this );
             }
 
-            for ( let key in module ) {
-                if ( !this[ key ] && module.hasOwnProperty( key ) ) {
-                    this[ key ] = module[ key ];
+            var expose = module.expose();
+
+            for ( let key in expose ) {
+                if ( !this[ key ] && expose.hasOwnProperty( key ) ) {
+                    this[ key ] = expose[ key ];
                 }
             }
         }, this );

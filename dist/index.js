@@ -413,12 +413,16 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           },
           registerModules: function(modules) {
             modules.forEach(function(module) {
+              if (typeof module !== 'tattyScreenModule') {
+                console.log('Error trying to attach module to tatty-screen');
+              }
               if (module.init) {
                 module.init.call(this);
               }
-              for (var key in module) {
-                if (!this[key] && module.hasOwnProperty(key)) {
-                  this[key] = module[key];
+              var expose = module.expose();
+              for (var key in expose) {
+                if (!this[key] && expose.hasOwnProperty(key)) {
+                  this[key] = expose[key];
                 }
               }
             }, this);
