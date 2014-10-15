@@ -439,7 +439,7 @@ export default class Screen extends EventEmitter {
         var cursor = document.createElement( 'div' );
         cursor.classList.add( 'cursor' );
         cursor.style.height = this.lineHeight + 'px';
-        this.parent.appendChild( cursor );
+        this.el.appendChild( cursor );
 
         return cursor;
     }
@@ -452,7 +452,7 @@ export default class Screen extends EventEmitter {
         var prompt = document.createElement( 'div' );
         prompt.classList.add( 'prompt' );
         prompt.innerHTML = ' > ';
-        this.parent.appendChild( prompt );
+        this.el.appendChild( prompt );
 
         return prompt;
     }

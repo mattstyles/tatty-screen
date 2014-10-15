@@ -4,6 +4,7 @@
 * _add_ - write beyond the line length
 * _add_ - puts alias
 * _add_ - ins alias
+* _add_ - allow setting cursor beyond available lines
 
 ## 1.1.0 - 14.10.14
 

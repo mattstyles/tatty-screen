@@ -291,14 +291,14 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             var cursor = document.createElement('div');
             cursor.classList.add('cursor');
             cursor.style.height = this.lineHeight + 'px';
-            this.parent.appendChild(cursor);
+            this.el.appendChild(cursor);
             return cursor;
           },
           createPrompt: function() {
             var prompt = document.createElement('div');
             prompt.classList.add('prompt');
             prompt.innerHTML = ' > ';
-            this.parent.appendChild(prompt);
+            this.el.appendChild(prompt);
             return prompt;
           },
           splitLine: function(chars) {
