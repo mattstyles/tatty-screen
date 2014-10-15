@@ -11,8 +11,8 @@
             background: black;
             color: #ccc;
 
-            font-family: 'PC Senior';
-            font-size: 14px;
+            font-family: 'Perfect DOS VGA 437';
+            font-size: 20px;
             line-height: 21px;
             letter-spacing: -1px;
         }
@@ -47,8 +47,24 @@
                     cols: 40,
                     rows: 25,
                     overlayOffset: 3,
-                    overlay: true
-                });
+                    overlay: false
+                }, [
+                    {
+                        debug: function() {
+                            for ( var key in this ) {
+                                if ( this.hasOwnProperty( key ) ) {
+                                    console.log( key );
+                                }
+                            }
+                        },
+
+                        init: function() {
+                            this.on( 'ready', function() {
+                                this.debug();
+                            }, this );
+                        }
+                    }
+                ]);
 
 
                 //tty.writeln( 'I ❤︎ Harmony' );

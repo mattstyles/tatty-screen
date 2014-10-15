@@ -7,8 +7,11 @@ export default class Screen extends EventEmitter {
      * Attaches itself to the element supplied and gets ready to print
      *
      * @constructs
+     * @param el {HTMLElement} the element to attach to
+     * @param opts {Object} options hash
+     * @param modules {Array[ Object ]} modules to add to the screen class
      */
-    constructor( el, opts ) {
+    constructor( el, opts, modules ) {
 
         this.opts = Object.assign({
             cols: 80,
@@ -17,6 +20,10 @@ export default class Screen extends EventEmitter {
             overlayOffset: 3
         }, opts || {} );
 
+        // Register modules early
+        if ( Array.isArray( modules ) ) {
+            this.registerModules( modules );
+        }
 
         // Set DOM styles
         this.parent = el;
@@ -72,6 +79,9 @@ export default class Screen extends EventEmitter {
 
             this.flashCursor();
         }, this );
+
+        // Tell anyone listening that we are ready
+        this.emit( 'ready' );
     }
 
     /**
@@ -559,5 +569,26 @@ export default class Screen extends EventEmitter {
         overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
 
         return overlay;
+    }
+
+    /**
+     * Registers and mixes in screen modules
+     */
+    registerModules( modules ) {
+        modules.forEach( function( module ) {
+            // if ( typeof module !== 'tattyScreenModule' ) {
+            //     console.log( 'Error trying to attach module to tatty-screen' );
+            // }
+
+            if ( module.init ) {
+                module.init.call( this );
+            }
+
+            for ( let key in module ) {
+                if ( !this[ key ] && module.hasOwnProperty( key ) ) {
+                    this[ key ] = module[ key ];
+                }
+            }
+        }, this );
     }
 }

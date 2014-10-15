@@ -63,13 +63,16 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
     }],
     execute: function() {
       $__export('default', (function($__super) {
-        var Screen = function Screen(el, opts) {
+        var Screen = function Screen(el, opts, modules) {
           this.opts = Object.assign({
             cols: 80,
             rows: 24,
             overlay: true,
             overlayOffset: 3
           }, opts || {});
+          if (Array.isArray(modules)) {
+            this.registerModules(modules);
+          }
           this.parent = el;
           this.el = this.createElement();
           this.insertStyle();
@@ -110,6 +113,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             }
             this.flashCursor();
           }, this);
+          this.emit('ready');
         };
         return ($traceurRuntime.createClass)(Screen, {
           write: function(chars) {
@@ -358,6 +362,18 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             ctx.fillRect(0, this.opts.overlayOffset - 1, 1, 1);
             overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
             return overlay;
+          },
+          registerModules: function(modules) {
+            modules.forEach(function(module) {
+              if (module.init) {
+                module.init.call(this);
+              }
+              for (var key in module) {
+                if (!this[key] && module.hasOwnProperty(key)) {
+                  this[key] = module[key];
+                }
+              }
+            }, this);
           }
         }, {}, $__super);
       }(EventEmitter)));
