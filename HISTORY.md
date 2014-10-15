@@ -1,4 +1,4 @@
-##
+## 1.2.0 - 15.10.14
 
 * _add_ - delete character behind cursor
 * _add_ - write beyond the line length
