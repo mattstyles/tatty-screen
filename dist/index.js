@@ -118,6 +118,9 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
         return ($traceurRuntime.createClass)(Screen, {
           write: function(chars) {
             var offset$__1;
+            if (!chars) {
+              return;
+            }
             if (this.cursor.x < 0) {
               this.createLine();
               this.cursor.x = 0;
@@ -152,7 +155,31 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.cursor.y--;
             this.emit('prompt', false);
           },
+          writechar: function(chars) {
+            if (!chars) {
+              return;
+            }
+            if (this.cursor.x < 0) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y = 0;
+            }
+            if (this.cursor.x >= this.opts.cols) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y++;
+            }
+            this.write(chars[0]);
+            this.emit('prompt', false);
+          },
           writeln: function(chars) {
+            if (!chars) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y = this.lines.length - 1;
+              this.emit('prompt', false);
+              return;
+            }
             var lines = this.splitLine(chars);
             for (var i = 0; i < lines.length; i++) {
               var line = this.createLine();
@@ -200,6 +227,9 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           },
           puts: function() {
             this.writeln.apply(this, arguments);
+          },
+          putc: function() {
+            this.writechar.apply(this, arguments);
           },
           ins: function() {
             this.write.apply(this, arguments);
