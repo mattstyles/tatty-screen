@@ -27,6 +27,7 @@ export default class Screen extends EventEmitter {
 
         // Set DOM styles
         this.parent = el;
+        this.overlay = null;
         this.el = this.createElement();
         this.insertStyle();
         this.parent.classList.add( 'tatty' );
@@ -391,10 +392,17 @@ export default class Screen extends EventEmitter {
         }
 
         // Sort out tatty size
+        this.setSize();
+
+        this.showLastLine();
+    }
+
+    setSize() {
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.lines.length * this.lineHeight + 'px';
 
-        this.showLastLine();
+        this.overlay.style.width = this.width + 'px';
+        this.overlay.style.height = this.lines.length * this.lineHeight + 'px';
     }
 
 
@@ -404,6 +412,7 @@ export default class Screen extends EventEmitter {
      */
     showLastLine() {
         this.el.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
+        this.overlay.style.transform = 'translatey(-' + ( ( this.lines.length * this.lineHeight ) - ( this.lineHeight * this.opts.rows ) ) + 'px )';
     }
 
 
@@ -488,6 +497,10 @@ export default class Screen extends EventEmitter {
         el.classList.add( 'inner' );
         this.parent.appendChild( el );
 
+        this.overlay = document.createElement( 'div' );
+        this.overlay.classList.add( 'overlay' );
+        this.parent.appendChild( this.overlay );
+
         return el;
     }
 
@@ -498,7 +511,7 @@ export default class Screen extends EventEmitter {
         var cursor = document.createElement( 'div' );
         cursor.classList.add( 'cursor' );
         cursor.style.height = this.lineHeight + 'px';
-        this.el.appendChild( cursor );
+        this.overlay.appendChild( cursor );
 
         return cursor;
     }
@@ -511,8 +524,8 @@ export default class Screen extends EventEmitter {
         var prompt = document.createElement( 'div' );
         prompt.classList.add( 'prompt' );
         prompt.innerHTML = ' > ';
-        this.el.appendChild( prompt );
-        this.lines[ this.lines.length - 1 ].appendChild( prompt );
+        this.overlay.appendChild( prompt );
+        //this.lines[ this.lines.length - 1 ].appendChild( prompt );
 
         return prompt;
     }

@@ -74,6 +74,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.registerModules(modules);
           }
           this.parent = el;
+          this.overlay = null;
           this.el = this.createElement();
           this.insertStyle();
           this.parent.classList.add('tatty');
@@ -293,12 +294,18 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
               this.lines.splice(position, 0, div);
               this.resetLines();
             }
+            this.setSize();
+            this.showLastLine();
+          },
+          setSize: function() {
             this.el.style.width = this.width + 'px';
             this.el.style.height = this.lines.length * this.lineHeight + 'px';
-            this.showLastLine();
+            this.overlay.style.width = this.width + 'px';
+            this.overlay.style.height = this.lines.length * this.lineHeight + 'px';
           },
           showLastLine: function() {
             this.el.style.transform = 'translatey(-' + ((this.lines.length * this.lineHeight) - (this.lineHeight * this.opts.rows)) + 'px )';
+            this.overlay.style.transform = 'translatey(-' + ((this.lines.length * this.lineHeight) - (this.lineHeight * this.opts.rows)) + 'px )';
           },
           resetLines: function() {
             this.el.innerHTML = '';
@@ -319,21 +326,23 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             var el = document.createElement('div');
             el.classList.add('inner');
             this.parent.appendChild(el);
+            this.overlay = document.createElement('div');
+            this.overlay.classList.add('overlay');
+            this.parent.appendChild(this.overlay);
             return el;
           },
           createCursor: function() {
             var cursor = document.createElement('div');
             cursor.classList.add('cursor');
             cursor.style.height = this.lineHeight + 'px';
-            this.el.appendChild(cursor);
+            this.overlay.appendChild(cursor);
             return cursor;
           },
           createPrompt: function() {
             var prompt = document.createElement('div');
             prompt.classList.add('prompt');
             prompt.innerHTML = ' > ';
-            this.el.appendChild(prompt);
-            this.lines[this.lines.length - 1].appendChild(prompt);
+            this.overlay.appendChild(prompt);
             return prompt;
           },
           splitLine: function(chars) {

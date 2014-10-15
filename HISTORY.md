@@ -7,7 +7,8 @@
 * _add_ - allow setting cursor beyond available lines
 * _add_ - writechar and putc alias
 * _update_ - handle error on passing no arguments to write functions
-
+* _add_ - overlay layer
+* _update_ - scanlines layer gets its own scan layer, rather than overlay
 
 ## 1.1.0 - 14.10.14
 
