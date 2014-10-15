@@ -16,8 +16,8 @@ export default class Screen extends EventEmitter {
         this.opts = Object.assign({
             cols: 80,
             rows: 24,
-            overlay: true,
-            overlayOffset: 3
+            scan: true,
+            scanOffset: 3
         }, opts || {} );
 
         // Register modules early
@@ -46,8 +46,8 @@ export default class Screen extends EventEmitter {
         });
         this.flashCursor();
 
-        if ( this.opts.overlay ) {
-            this.overlay = this.createOverlay();
+        if ( this.opts.scan ) {
+            this.overlay = this.createScan();
         }
 
         /**
@@ -442,6 +442,9 @@ export default class Screen extends EventEmitter {
             .tatty .inner {
                 position: absolute;
             }
+            .tatty .overlay {
+                positoin: absolute;
+            }
             .tatty .line {
                 position: absolute;
                 white-space: pre;
@@ -461,7 +464,7 @@ export default class Screen extends EventEmitter {
                 left: 0;
                 white-space: pre;
             }
-            .tatty .overlay {
+            .tatty .scan {
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -509,6 +512,7 @@ export default class Screen extends EventEmitter {
         prompt.classList.add( 'prompt' );
         prompt.innerHTML = ' > ';
         this.el.appendChild( prompt );
+        this.lines[ this.lines.length - 1 ].appendChild( prompt );
 
         return prompt;
     }
@@ -606,24 +610,24 @@ export default class Screen extends EventEmitter {
     /**
      * Create scanlines
      */
-    createOverlay() {
+    createScan() {
         var canvas = document.createElement( 'canvas' );
-        var overlay = document.createElement( 'div' );
-        overlay.classList.add( 'overlay' );
-        this.parent.appendChild( overlay );
+        var scan = document.createElement( 'div' );
+        scan.classList.add( 'scan' );
+        this.parent.appendChild( scan );
 
-        var style = window.getComputedStyle( overlay, null );
+        var style = window.getComputedStyle( scan, null );
 
         canvas.width = 1;
-        canvas.height = this.opts.overlayOffset;
+        canvas.height = this.opts.scanOffset;
         var ctx = canvas.getContext( '2d' );
 
         ctx.fillStyle = style.color || '#fff';
-        ctx.fillRect( 0, this.opts.overlayOffset - 1, 1, 1 );
+        ctx.fillRect( 0, this.opts.scanOffset - 1, 1, 1 );
 
-        overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
+        scan.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
 
-        return overlay;
+        return scan;
     }
 
     /**

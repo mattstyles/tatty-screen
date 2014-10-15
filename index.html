@@ -11,9 +11,9 @@
             background: black;
             color: #ccc;
 
-            font-family: 'Perfect DOS VGA 437';
-            font-size: 20px;
-            line-height: 21px;
+            font-family: 'PC Senior';
+            font-size: 14px;
+            line-height: 18px;
             letter-spacing: -1px;
         }
 
@@ -21,7 +21,7 @@
             border-left: 1px solid #888;
         }
 
-        #tty .overlay {
+        #tty .scan {
             color: #000;
             opacity: .2;
         }
@@ -46,8 +46,8 @@
                 window.tty = new Tatty( document.querySelector( '#tty' ), {
                     cols: 40,
                     rows: 25,
-                    overlayOffset: 3,
-                    overlay: false
+                    scanOffset: 3,
+                    scan: false
                 }, [
                     {
                         debug: function() {
@@ -66,38 +66,9 @@
                     }
                 ]);
 
-
-<<<<<<< HEAD
-                //tty.writeln( 'I ❤︎ Harmony' );
-                //tty.prompt();
-                //tty.write( 'info' );
-                /*tty.writeln( 'You are encouraged to share this program with other users.' );
-                tty.prompt();
-                tty.setCursor( 18,1 );
-                tty.write( 'Contra ' );
-                tty.write( 'Dextra' );
-                tty.write( ' Avenue.' );
-                tty.setCursor( 3, 2 );
-                tty.emit( 'showCursor', true );
-                */
-
-                //tty.setCursor( 12, 24 );
-                tty.write( '¢' );
-
-                for ( var x = 0; x < 20; x++ ) {
-                    //tty.setCursor( (Math.random()*40) | 0, (Math.random()*23) | 0 );
-                    //tty.write( '#' );
-                }
-
-                tty.writeln( '' );
-                tty.prompt();
-=======
                 tty.writeln( 'I ❤︎ Harmony.' );
                 tty.writeln( 'You are encouraged to share this program with other users.' );
                 tty.prompt();
->>>>>>> f2a6c3fa12803442f40c81b2066b09be9044c510
-
-
 
                 document.addEventListener( 'keypress', function( event ) {
                     event.preventDefault();

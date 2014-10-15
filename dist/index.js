@@ -67,8 +67,8 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           this.opts = Object.assign({
             cols: 80,
             rows: 24,
-            overlay: true,
-            overlayOffset: 3
+            scan: true,
+            scanOffset: 3
           }, opts || {});
           if (Array.isArray(modules)) {
             this.registerModules(modules);
@@ -89,8 +89,8 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             y: -1
           });
           this.flashCursor();
-          if (this.opts.overlay) {
-            this.overlay = this.createOverlay();
+          if (this.opts.scan) {
+            this.overlay = this.createScan();
           }
           this.cursor.on('changeX', function() {
             this.cursorElement.style.left = this.cursor.x * this.charWidth + 'px';
@@ -311,7 +311,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           insertStyle: function() {
             var style = document.createElement('style');
             style.id = 'tatty';
-            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro', monospace;\n                font-size: 15px;\n                line-height: 19px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n            .tatty .overlay {\n                position: absolute;\n                left: 0;\n                top: 0;\n                right: 0;\n                bottom: 0;\n                pointer-events: none;\n                background-repeat: repeat;\n                opacity: .3;\n            }\n        ";
+            style.innerHTML = "\n            .tatty {\n                position: relative;\n                background:white;\n                color: #333a3c;\n                font-family: 'Source Code Pro', monospace;\n                font-size: 15px;\n                line-height: 19px;\n                -webkit-font-smoothing: antialiased;\n                -moz-osx-font-smoothing: grayscale;\n                overflow: hidden;\n            }\n            .tatty .inner {\n                position: absolute;\n            }\n            .tatty .overlay {\n                positoin: absolute;\n            }\n            .tatty .line {\n                position: absolute;\n                white-space: pre;\n            }\n            .tatty .cursor {\n                position: absolute;\n                top: 0;\n                left: 0;\n                border-left: 1px solid #888;\n            }\n            .tatty .cursor.hidden {\n                display: none;\n            }\n            .tatty .prompt {\n                position: absolute;\n                top: 0;\n                left: 0;\n                white-space: pre;\n            }\n            .tatty .scan {\n                position: absolute;\n                left: 0;\n                top: 0;\n                right: 0;\n                bottom: 0;\n                pointer-events: none;\n                background-repeat: repeat;\n                opacity: .3;\n            }\n        ";
             var head = document.querySelector('head');
             head.appendChild(style);
           },
@@ -333,6 +333,7 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             prompt.classList.add('prompt');
             prompt.innerHTML = ' > ';
             this.el.appendChild(prompt);
+            this.lines[this.lines.length - 1].appendChild(prompt);
             return prompt;
           },
           splitLine: function(chars) {
@@ -387,19 +388,19 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.parent.removeChild(el);
             return fontWidth;
           },
-          createOverlay: function() {
+          createScan: function() {
             var canvas = document.createElement('canvas');
-            var overlay = document.createElement('div');
-            overlay.classList.add('overlay');
-            this.parent.appendChild(overlay);
-            var style = window.getComputedStyle(overlay, null);
+            var scan = document.createElement('div');
+            scan.classList.add('scan');
+            this.parent.appendChild(scan);
+            var style = window.getComputedStyle(scan, null);
             canvas.width = 1;
-            canvas.height = this.opts.overlayOffset;
+            canvas.height = this.opts.scanOffset;
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = style.color || '#fff';
-            ctx.fillRect(0, this.opts.overlayOffset - 1, 1, 1);
-            overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
-            return overlay;
+            ctx.fillRect(0, this.opts.scanOffset - 1, 1, 1);
+            scan.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
+            return scan;
           },
           registerModules: function(modules) {
             modules.forEach(function(module) {
