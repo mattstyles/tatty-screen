@@ -5,6 +5,7 @@
 * _add_ - puts alias
 * _add_ - ins alias
 * _add_ - writechar and putc alias
+* _update_ - handle error on passing no arguments to write functions
 
 ## 1.1.0 - 14.10.14
 
