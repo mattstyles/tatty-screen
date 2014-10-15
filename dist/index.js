@@ -63,13 +63,16 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
     }],
     execute: function() {
       $__export('default', (function($__super) {
-        var Screen = function Screen(el, opts) {
+        var Screen = function Screen(el, opts, modules) {
           this.opts = Object.assign({
             cols: 80,
             rows: 24,
             overlay: true,
             overlayOffset: 3
           }, opts || {});
+          if (Array.isArray(modules)) {
+            this.registerModules(modules);
+          }
           this.parent = el;
           this.el = this.createElement();
           this.insertStyle();
@@ -110,11 +113,15 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             }
             this.flashCursor();
           }, this);
+          this.emit('ready');
         };
         return ($traceurRuntime.createClass)(Screen, {
           write: function(chars) {
             var offset$__1;
             var offset$__2;
+            if (!chars) {
+              return;
+            }
             if (this.cursor.x < 0) {
               this.createLine();
               this.cursor.x = 0;
@@ -156,7 +163,31 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             this.cursor.y--;
             this.emit('prompt', false);
           },
+          writechar: function(chars) {
+            if (!chars) {
+              return;
+            }
+            if (this.cursor.x < 0) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y = 0;
+            }
+            if (this.cursor.x >= this.opts.cols) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y++;
+            }
+            this.write(chars[0]);
+            this.emit('prompt', false);
+          },
           writeln: function(chars) {
+            if (!chars) {
+              this.createLine();
+              this.cursor.x = 0;
+              this.cursor.y = this.lines.length - 1;
+              this.emit('prompt', false);
+              return;
+            }
             var lines = this.splitLine(chars);
             for (var i = 0; i < lines.length; i++) {
               var line = this.createLine();
@@ -204,6 +235,9 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
           },
           puts: function() {
             this.writeln.apply(this, arguments);
+          },
+          putc: function() {
+            this.writechar.apply(this, arguments);
           },
           ins: function() {
             this.write.apply(this, arguments);
@@ -366,6 +400,18 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
             ctx.fillRect(0, this.opts.overlayOffset - 1, 1, 1);
             overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
             return overlay;
+          },
+          registerModules: function(modules) {
+            modules.forEach(function(module) {
+              if (module.init) {
+                module.init.call(this);
+              }
+              for (var key in module) {
+                if (!this[key] && module.hasOwnProperty(key)) {
+                  this[key] = module[key];
+                }
+              }
+            }, this);
           }
         }, {}, $__super);
       }(EventEmitter)));

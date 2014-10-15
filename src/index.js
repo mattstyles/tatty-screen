@@ -7,8 +7,11 @@ export default class Screen extends EventEmitter {
      * Attaches itself to the element supplied and gets ready to print
      *
      * @constructs
+     * @param el {HTMLElement} the element to attach to
+     * @param opts {Object} options hash
+     * @param modules {Array[ Object ]} modules to add to the screen class
      */
-    constructor( el, opts ) {
+    constructor( el, opts, modules ) {
 
         this.opts = Object.assign({
             cols: 80,
@@ -17,6 +20,10 @@ export default class Screen extends EventEmitter {
             overlayOffset: 3
         }, opts || {} );
 
+        // Register modules early
+        if ( Array.isArray( modules ) ) {
+            this.registerModules( modules );
+        }
 
         // Set DOM styles
         this.parent = el;
@@ -72,6 +79,9 @@ export default class Screen extends EventEmitter {
 
             this.flashCursor();
         }, this );
+
+        // Tell anyone listening that we are ready
+        this.emit( 'ready' );
     }
 
     /**
@@ -83,6 +93,10 @@ export default class Screen extends EventEmitter {
      * @param chars {String} the characters to print
      */
     write( chars ) {
+        if ( !chars ) {
+            return;
+        }
+
         // If there are no lines then we need to create one
         if ( this.cursor.x < 0 ) {
             this.createLine();
@@ -147,11 +161,46 @@ export default class Screen extends EventEmitter {
     }
 
     /**
+     * Writes a single character at the current cursor position
+     */
+    writechar( chars ) {
+        if ( !chars ) {
+            return;
+        }
+
+        // If there are no lines then we need to create one
+        if ( this.cursor.x < 0 ) {
+            this.createLine();
+            this.cursor.x = 0;
+            this.cursor.y = 0;
+        }
+
+        // If we're at the end of a line then we need to create a new one
+        if ( this.cursor.x >= this.opts.cols ) {
+            this.createLine();
+            this.cursor.x = 0;
+            this.cursor.y++;
+        }
+
+        // Now print the char
+        this.write( chars[ 0 ] );
+        this.emit( 'prompt', false );
+    }
+
+    /**
      * Writes the specified characters to a new line
      *
      * @param chars {String} the characters to print
      */
     writeln( chars ) {
+        if ( !chars ) {
+            this.createLine();
+            this.cursor.x = 0;
+            this.cursor.y = this.lines.length - 1;
+            this.emit( 'prompt', false );
+            return;
+        }
+
         // Split the input into separate lines to print
         var lines = this.splitLine( chars );
 
@@ -224,6 +273,13 @@ export default class Screen extends EventEmitter {
      */
     puts() {
         this.writeln.apply( this, arguments );
+    }
+
+    /**
+     * Putc alias - for writechar
+     */
+    putc() {
+        this.writechar.apply( this, arguments );
     }
 
     /**
@@ -568,5 +624,26 @@ export default class Screen extends EventEmitter {
         overlay.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
 
         return overlay;
+    }
+
+    /**
+     * Registers and mixes in screen modules
+     */
+    registerModules( modules ) {
+        modules.forEach( function( module ) {
+            // if ( typeof module !== 'tattyScreenModule' ) {
+            //     console.log( 'Error trying to attach module to tatty-screen' );
+            // }
+
+            if ( module.init ) {
+                module.init.call( this );
+            }
+
+            for ( let key in module ) {
+                if ( !this[ key ] && module.hasOwnProperty( key ) ) {
+                    this[ key ] = module[ key ];
+                }
+            }
+        }, this );
     }
 }
