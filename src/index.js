@@ -48,7 +48,7 @@ export default class Screen extends EventEmitter {
         this.flashCursor();
 
         if ( this.opts.scan ) {
-            this.overlay = this.createScan();
+            this.scan = this.createScan();
         }
 
         /**
