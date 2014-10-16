@@ -1,5 +1,5 @@
-import { Point } from 'utils';
-import EventEmitter from 'EventEmitter';
+import { Point } from './utils';
+import EventEmitter from '../../EventEmitter/index';
 
 export default class Screen extends EventEmitter {
 

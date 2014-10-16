@@ -3,25 +3,20 @@
 var path = require( 'path' );
 var fs = require( 'fs' );
 var builder = require( 'systemjs-builder' );
+var pkg = require( '../package.json' );
 
 var src = path.join( __dirname, '../src' );
 var dist = path.join( __dirname, '../dist' );
 var modules = path.join( __dirname, '../node_modules' );
 
-builder.build( 'index', {
-    baseURL: path.resolve( src ),
-    paths: {
-        EventEmitter: path.resolve( src, 'vendor/EventEmitter/index.js' )
-    }
-    // map: {
-    //     eventEmitter: path.join( src, 'vendor/eventEmitter/EventEmitter' ),
-    //     jquery: 'vendor/jquery/dist/jquery'
-    // }
-}, path.join( dist, '/index.js' ) )
+builder.build( './' + pkg.name + '/' + pkg.name, {
+    baseURL: '../'
+}, path.join( dist, pkg.name + '.js' ) )
     .then( function() {
         console.log( 'Build complete' );
     })
     .catch( function( err ) {
+        console.error( 'Build error' );
         console.error( err );
     });
 

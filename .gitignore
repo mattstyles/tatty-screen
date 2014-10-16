@@ -2,3 +2,7 @@
 /node_modules
 /dist/common
 /src/vendor
+/vendor
+/bower_components
+/components
+/EventEmitter

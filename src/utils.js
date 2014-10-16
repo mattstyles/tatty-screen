@@ -1,4 +1,4 @@
-import EventEmitter from 'EventEmitter';
+import EventEmitter from '../../EventEmitter/index';
 
 var position = {
     x: 0,

@@ -1,7 +1,7 @@
 {
   "name": "tatty-screen",
   "version": "1.3.0-snapshot",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "authors": [
     "mattstyles <matt@veryfizzyjelly.com>"
   ],
@@ -23,7 +23,7 @@
     "build",
     "index.html"
   ],
-  "devDependencies": {
+  "dependencies": {
     "EventEmitter": "git://github.com/primus/EventEmitter3.git#master"
   }
 }

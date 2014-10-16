@@ -1,8 +1,8 @@
 "format register";
 
-System.register("utils", ["EventEmitter"], function($__export) {
+System.register("tatty-screen/src/utils", ["EventEmitter/index"], function($__export) {
   "use strict";
-  var __moduleName = "utils";
+  var __moduleName = "tatty-screen/src/utils";
   var EventEmitter,
       position,
       Point;
@@ -50,9 +50,9 @@ System.register("utils", ["EventEmitter"], function($__export) {
   };
 });
 
-System.register("index", ["utils", "EventEmitter"], function($__export) {
+System.register("tatty-screen/src/index", ["tatty-screen/src/utils", "EventEmitter/index"], function($__export) {
   "use strict";
-  var __moduleName = "index";
+  var __moduleName = "tatty-screen/src/index";
   var Point,
       EventEmitter;
   return {
@@ -433,12 +433,26 @@ System.register("index", ["utils", "EventEmitter"], function($__export) {
   };
 });
 
-System.register("EventEmitter", [], true, function(require, exports, module) {
+System.register("tatty-screen/tatty-screen", ["tatty-screen/src/index"], function($__export) {
+  "use strict";
+  var __moduleName = "tatty-screen/tatty-screen";
+  var Screen;
+  return {
+    setters: [function(m) {
+      Screen = m.default;
+    }],
+    execute: function() {
+      $__export('default', Screen);
+    }
+  };
+});
+
+System.register("EventEmitter/index", [], true, function(require, exports, module) {
   var global = System.global;
   var __define = global.define;
   global.define = undefined;
-  var __filename = "vendor/EventEmitter/index.js";
-  var __dirname = "vendor/EventEmitter";
+  var __filename = "EventEmitter/index.js";
+  var __dirname = "EventEmitter";
   'use strict';
   
   /**
