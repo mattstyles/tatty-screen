@@ -1,3 +1,9 @@
+## 1.3.0 - 17.10.14
+
+* _update_ - module structure for better integration
+* _update_ - module properties
+* _fix_ - scan div
+
 ## 1.2.0 - 15.10.14
 
 * _add_ - delete character behind cursor
