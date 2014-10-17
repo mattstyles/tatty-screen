@@ -1,5 +1,6 @@
 import { Point } from './utils';
 import EventEmitter from '../../EventEmitter/index';
+import baseModule from '../../tatty-screen-base-module/index';
 
 export default class Screen extends EventEmitter {
 
@@ -648,8 +649,9 @@ export default class Screen extends EventEmitter {
      */
     registerModules( modules ) {
         modules.forEach( function( module ) {
-            if ( typeof module !== 'tattyScreenModule' ) {
-                console.log( 'Error trying to attach module to tatty-screen' );
+            if ( !module instanceof baseModule ) {
+                console.log( 'Error trying to attach module to tatty-screen', module.name );
+                return;
             }
 
             if ( module.init ) {
