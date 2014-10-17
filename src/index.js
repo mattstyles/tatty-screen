@@ -14,17 +14,17 @@ export default class Screen extends EventEmitter {
      */
     constructor( el, opts, modules ) {
 
-        this.opts = Object.assign({
+        this.defaults = {
             cols: 80,
-            rows: 24,
-            scan: true,
-            scanOffset: 3
-        }, opts || {} );
+            rows: 24
+        };
 
         // Register modules early
         if ( Array.isArray( modules ) ) {
             this.registerModules( modules );
         }
+
+        this.opts = Object.assign( this.defaults, opts || {} );
 
         // Set DOM styles
         this.parent = el;
@@ -47,10 +47,6 @@ export default class Screen extends EventEmitter {
             y: -1
         });
         this.flashCursor();
-
-        if ( this.opts.scan ) {
-            this.scan = this.createScan();
-        }
 
         /**
          * Events
@@ -474,16 +470,6 @@ export default class Screen extends EventEmitter {
                 left: 0;
                 white-space: pre;
             }
-            .tatty .scan {
-                position: absolute;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                pointer-events: none;
-                background-repeat: repeat;
-                opacity: .3;
-            }
         `;
 
         var head = document.querySelector( 'head' );
@@ -618,30 +604,6 @@ export default class Screen extends EventEmitter {
         var fontWidth = el.offsetWidth;
         this.parent.removeChild( el );
         return fontWidth;
-    }
-
-
-    /**
-     * Create scanlines
-     */
-    createScan() {
-        var canvas = document.createElement( 'canvas' );
-        var scan = document.createElement( 'div' );
-        scan.classList.add( 'scan' );
-        this.parent.appendChild( scan );
-
-        var style = window.getComputedStyle( scan, null );
-
-        canvas.width = 1;
-        canvas.height = this.opts.scanOffset;
-        var ctx = canvas.getContext( '2d' );
-
-        ctx.fillStyle = style.color || '#fff';
-        ctx.fillRect( 0, this.opts.scanOffset - 1, 1, 1 );
-
-        scan.style.backgroundImage = 'url( ' + canvas.toDataURL() + ' )';
-
-        return scan;
     }
 
     /**
