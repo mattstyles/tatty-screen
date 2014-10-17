@@ -1,3 +1,8 @@
+## 1.3.1 - 17.10.14
+
+* _remove_ - scanlines
+* _update_ - check module type
+
 ## 1.3.0 - 17.10.14
 
 * _update_ - module structure for better integration
