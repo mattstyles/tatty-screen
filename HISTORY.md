@@ -1,6 +1,7 @@
-##
+## 1.4.0 - 18.10.14
 
-* _add_  - store modules and pass back module instance to module
+* _add_ - store modules and pass back module instance to module
+* _add_ - current line convenience method
 
 ## 1.3.1 - 17.10.14
 
