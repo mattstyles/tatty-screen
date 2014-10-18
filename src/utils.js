@@ -39,3 +39,30 @@ export class Point extends EventEmitter {
         console.log( id, position.x, position.y );
     }
 }
+
+export class Modules extends EventEmitter {
+    constructor() {
+        this.modules = [];
+    }
+
+    push( module ) {
+        if ( this.getModule( module.name ) ) {
+            console.error( 'module id already registered' );
+            return;
+        }
+
+        this.modules.push( module );
+        this.emit( 'module:added', module );
+    }
+
+    getModule( id ) {
+        let i = this.modules.length - 1;
+        while( i >= 0 ) {
+            if ( this.modules[ i ].name === id ) {
+                return this.modules[ i ];
+            }
+            i--;
+        }
+        return false;
+    }
+}
