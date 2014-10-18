@@ -1,3 +1,7 @@
+##
+
+* _add_  - store modules and pass back module instance to module
+
 ## 1.3.1 - 17.10.14
 
 * _remove_ - scanlines
