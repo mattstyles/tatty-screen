@@ -1,4 +1,4 @@
-import { Point } from './utils';
+import { Point, Modules } from './utils';
 import EventEmitter from '../../EventEmitter/index';
 import baseModule from '../../tatty-screen-base-module/index';
 
@@ -18,6 +18,9 @@ export default class Screen extends EventEmitter {
             cols: 80,
             rows: 24
         };
+
+        // Create modules object
+        this.modules = new Modules();
 
         // Register modules early
         if ( Array.isArray( modules ) ) {
@@ -616,11 +619,13 @@ export default class Screen extends EventEmitter {
                 return;
             }
 
+            this.modules.push( module );
+
             if ( module.init ) {
-                module.init.call( this );
+                module.init.call( this, module );
             }
 
-            var expose = module.expose();
+            var expose = module.expose( module );
 
             for ( let key in expose ) {
                 if ( !this[ key ] && expose.hasOwnProperty( key ) ) {
