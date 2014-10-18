@@ -216,7 +216,7 @@ export default class Screen extends EventEmitter {
     }
 
     /**
-     * Creates a prompt line and sets up the input field
+     * Creates a prompt line
      */
     prompt() {
         var cmd = this.createLine();
@@ -349,6 +349,13 @@ export default class Screen extends EventEmitter {
      */
     get bufferSize() {
         return this.opts.cols * this.opts.rows;
+    }
+
+    /**
+     * Returns the current line as a string
+     */
+    get currentLine() {
+        return this.lines[ this.cursor.y ].innerHTML;
     }
 
     /*-----------------------------------------------------------*\
