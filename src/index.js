@@ -449,7 +449,7 @@ export default class Screen extends EventEmitter {
                 position: absolute;
             }
             .tatty .overlay {
-                positoin: absolute;
+                position: absolute;
             }
             .tatty .line {
                 position: absolute;
