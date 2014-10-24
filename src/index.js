@@ -116,7 +116,7 @@ export default class Screen extends EventEmitter {
 
         // Grab the line and contents
         var line = this.lines[ this.cursor.y ];
-        var contents = line.innerHTML;
+        var contents = line.textContent;
 
         // If the cursor is positioned beyond the end of a line then extend the line
         if ( this.cursor.x > contents.length ) {
@@ -128,7 +128,7 @@ export default class Screen extends EventEmitter {
         }
 
 
-        var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length )
+        var newline = contents.slice( 0, this.cursor.x ) + chars + contents.slice( this.cursor.x, contents.length );
 
         // Grab cursor offset from end of the line
         var offset = contents.length - this.cursor.x;
@@ -136,8 +136,7 @@ export default class Screen extends EventEmitter {
 
         // newline replaces line, but lets check length
         if ( newline.length <= this.opts.cols ) {
-            line.innerHTML = '';
-            line.appendChild( document.createTextNode( newline ) );
+            line.textContent = newline;
             this.emit( 'prompt', false );
             return;
         }
@@ -151,8 +150,7 @@ export default class Screen extends EventEmitter {
             var l = this.createLine({
                 append: false
             });
-            l.innerHTML = '';
-            l.appendChild( document.createTextNode( newlines[ i ] ) );
+            l.textContent = newlines[ i ];
             this.appendLine( l, this.cursor.y );
 
             this.cursor.y++;
@@ -209,7 +207,7 @@ export default class Screen extends EventEmitter {
 
         for ( let i = 0; i < lines.length; i++ ) {
             var line = this.createLine();
-            line.appendChild( document.createTextNode( lines[ i ] ) );
+            line.textContent = lines[ i ];
             this.cursor.x = lines[ i ].length;
         }
 
@@ -222,7 +220,7 @@ export default class Screen extends EventEmitter {
      */
     prompt() {
         var cmd = this.createLine();
-        cmd.innerHTML = '   ';
+        cmd.textContent = '   ';
         cmd.classList.add( 'prompt' );
         this.cursor.y = this.lines.length - 1;
         this.cursor.x = 3;
@@ -261,12 +259,12 @@ export default class Screen extends EventEmitter {
             if ( this.cursor.y === 0 ) return;
 
             this.cursor.y--;
-            this.cursor.x = this.lines[ this.cursor.y ].innerHTML.length;
+            this.cursor.x = this.lines[ this.cursor.y ].textContent.length;
         }
 
         var line = this.lines[ this.cursor.y ];
-        var newline = line.innerHTML.slice( 0, line.innerHTML.length - 1 );
-        line.innerHTML = newline;
+        var newline = line.textContent.slice( 0, line.textContent.length - 1 );
+        line.textContent = newline;
 
         this.cursor.x--;
     }
@@ -357,7 +355,7 @@ export default class Screen extends EventEmitter {
      * Returns the current line as a string
      */
     get currentLine() {
-        return this.lines[ this.cursor.y ].innerHTML;
+        return this.lines[ this.cursor.y ].textContent;
     }
 
     /*-----------------------------------------------------------*\
@@ -522,7 +520,7 @@ export default class Screen extends EventEmitter {
     createPrompt() {
         var prompt = document.createElement( 'div' );
         prompt.classList.add( 'prompt' );
-        prompt.innerHTML = ' > ';
+        prompt.textContent = ' > ';
         this.overlay.appendChild( prompt );
         //this.lines[ this.lines.length - 1 ].appendChild( prompt );
 
