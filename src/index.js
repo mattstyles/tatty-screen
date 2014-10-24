@@ -207,7 +207,7 @@ export default class Screen extends EventEmitter {
 
         for ( let i = 0; i < lines.length; i++ ) {
             var line = this.createLine();
-            line.innerHTML = lines[ i ];
+            line.appendChild( document.createTextNode( lines[ i ] ) );
             this.cursor.x = lines[ i ].length;
         }
 
