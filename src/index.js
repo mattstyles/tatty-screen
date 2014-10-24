@@ -270,6 +270,27 @@ export default class Screen extends EventEmitter {
     }
 
     /**
+     * Removes the last line
+     */
+    deleteln( num ) {
+        var line = null;
+
+        if ( !this.lines.length ) {
+            return;
+        }
+
+        if ( !num || num >= this.lines.length ) {
+            line = this.lines[ this.lines.length - 1 ];
+            num = this.lines.length - 1;
+        } else {
+            line = this.lines[ num ];
+        }
+
+        this.el.removeChild( line );
+        this.lines.splice( num, 1 );
+    }
+
+    /**
      * Puts alias - for writeln
      */
     puts() {
