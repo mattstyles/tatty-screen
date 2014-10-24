@@ -136,7 +136,8 @@ export default class Screen extends EventEmitter {
 
         // newline replaces line, but lets check length
         if ( newline.length <= this.opts.cols ) {
-            line.innerHTML = newline;
+            line.innerHTML = '';
+            line.appendChild( document.createTextNode( newline ) );
             this.emit( 'prompt', false );
             return;
         }
@@ -150,11 +151,12 @@ export default class Screen extends EventEmitter {
             var l = this.createLine({
                 append: false
             });
-            l.innerHTML = newlines[ i ];
+            l.innerHTML = '';
+            l.appendChild( document.createTextNode( newlines[ i ] ) );
             this.appendLine( l, this.cursor.y );
 
             this.cursor.y++;
-            this.cursor.x = l.innerHTML.length - offset;
+            this.cursor.x = newlines[ i ].length - offset;
         }
 
         this.cursor.y--;
