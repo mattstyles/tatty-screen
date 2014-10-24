@@ -1,6 +1,7 @@
-##
+## 1.5.0 - 24.10.14
 
-
+* _add_ - delete line
+* _update_ - allow use of html entities
 
 ## 1.4.0 - 18.10.14
 
